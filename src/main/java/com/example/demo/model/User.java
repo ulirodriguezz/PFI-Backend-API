@@ -14,6 +14,7 @@ public class User {
     private String password;
     private String name;
     private String surname;
+    private String email;
 
     public User() {
     }
@@ -56,5 +57,13 @@ public class User {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

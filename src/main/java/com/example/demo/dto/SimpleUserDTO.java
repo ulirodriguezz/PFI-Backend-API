@@ -5,12 +5,14 @@ public class SimpleUserDTO {
     private String password;
     private String name;
     private String surname;
+    private String email;
 
     private SimpleUserDTO(Builder builder){
         this.username = builder.username;
         this.password = builder.password;
         this.name = builder.name;
         this.surname = builder.surname;
+        this.email = builder.email;
     }
 
     public SimpleUserDTO() {
@@ -21,6 +23,8 @@ public class SimpleUserDTO {
         private String password;
         private String name;
         private String surname;
+
+        private String email;
         public Builder username(String username){
             this.username = username;
             return this;
@@ -37,6 +41,11 @@ public class SimpleUserDTO {
             this.surname = surname;
             return this;
         }
+        public Builder email(String email){
+            this.email = email;
+            return this;
+        }
+
 
         public SimpleUserDTO build(){
             return new SimpleUserDTO(this);
