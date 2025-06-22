@@ -43,7 +43,10 @@ public class AuthController {
         );
         SecurityContextHolder.getContext().setAuthentication(auth);
         String token = jwtProvider.generateToken(auth);
-        return ResponseEntity.ok(token);
+        User user = userService.getUserByUsername(credentials.getUsername());
+        SimpleUserDTO loggedUserDTO = userMapper.toSimpleUserDTO(user);
+        loggedUserDTO.setToken(token);
+        return ResponseEntity.ok(loggedUserDTO);
     }
     @PostMapping("/register")
     public ResponseEntity<SimpleUserDTO> register (@RequestBody SimpleUserDTO newUser){
