@@ -6,6 +6,7 @@ public class SimpleUserDTO {
     private String name;
     private String surname;
     private String email;
+    private String token;
 
     private SimpleUserDTO(Builder builder){
         this.username = builder.username;
@@ -23,8 +24,8 @@ public class SimpleUserDTO {
         private String password;
         private String name;
         private String surname;
-
         private String email;
+        private String token;
         public Builder username(String username){
             this.username = username;
             return this;
@@ -43,6 +44,10 @@ public class SimpleUserDTO {
         }
         public Builder email(String email){
             this.email = email;
+            return this;
+        }
+        public Builder token(String token){
+            this.token = token;
             return this;
         }
 
