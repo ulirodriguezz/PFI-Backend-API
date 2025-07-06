@@ -30,8 +30,5 @@ public class UserDetailService implements UserDetailsService {
                 .orElseThrow(() -> new BadCredentialsException("Credenciales invalidas (username)"));
         return user;
     }
-    @PostConstruct
-    public void testConfig() {
-        System.out.println("SecurityConfig OK");
-    }
+
 }

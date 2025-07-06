@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler
-    public ResponseEntity<String> hanldeBadCredentials(BadCredentialsException e){
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales invalidas");
+    public ResponseEntity<ErrorMessage> handleBadCredentials(BadCredentialsException e){
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorMessage("Credenciales inválidas"));
 
     }
     @ExceptionHandler
-    public ResponseEntity<String> handleUsernameNotFound(UsernameNotFoundException e){
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Nombre de usuario incorrecto");
+    public ResponseEntity<ErrorMessage> handleUsernameNotFound(UsernameNotFoundException e){
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorMessage("Nombre de usuario incorrecto"));
 
     }
 }

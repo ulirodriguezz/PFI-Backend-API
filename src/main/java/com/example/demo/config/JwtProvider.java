@@ -42,7 +42,6 @@ public class JwtProvider {
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
-        System.out.println("USERNAME: "+ username);
         return  username;
     }
 
@@ -51,8 +50,6 @@ public class JwtProvider {
             Jwts.parserBuilder().setSigningKey(jwtSecret).build().parseClaimsJws(token);
             return true;
         }catch (Exception e){
-            System.out.println(token);
-            System.out.println(e.getMessage());
             return false;
         }
     }
