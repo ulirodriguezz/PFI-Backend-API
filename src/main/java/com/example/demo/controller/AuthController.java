@@ -53,9 +53,5 @@ public class AuthController {
         User registeredUser = userService.registerUser(userMapper.toUserEntity(newUser));
         return ResponseEntity.status(HttpStatus.OK).body(userMapper.toSimpleUserDTO(registeredUser));
     }
-    @GetMapping("/test-auth")
-    public String testAuth(Authentication authentication) {
-        if (authentication == null) return "No autenticado";
-        return "Autenticado como: " + authentication.getName();
-    }
+
 }
