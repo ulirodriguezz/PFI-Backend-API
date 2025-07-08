@@ -6,6 +6,8 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 @Service
 public class ItemService {
     private ItemRepository itemRepository;
@@ -28,5 +30,12 @@ public class ItemService {
         Item item = itemRepository.getItemByName(name)
                 .orElseThrow(()-> new EntityNotFoundException("Item no encontrado"));
         return item;
+    }
+
+    public Set<Item> filterItems(String name, String description) {
+        Set<Item> results = itemRepository.searchAllByQ(name,description);
+        if(results.isEmpty())
+            throw new EntityNotFoundException("No se encontraron items");
+        return results;
     }
 }

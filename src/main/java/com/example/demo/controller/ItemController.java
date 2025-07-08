@@ -6,10 +6,9 @@ import com.example.demo.model.Item;
 import com.example.demo.service.ItemService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 @RestController
 public class ItemController {
@@ -26,5 +25,20 @@ public class ItemController {
         Item storedItem =itemService.saveItem(newItem);
         SimpleItemDTO storedItemData = itemMapper.toSimpleItemDTO(storedItem);
         return ResponseEntity.status(HttpStatus.OK).body(storedItemData);
+    }
+    @GetMapping("/items/{itemId}")
+    public ResponseEntity<SimpleItemDTO> getItemById(@PathVariable long itemId){
+        Item storedItem = itemService.getItemById(itemId);
+        SimpleItemDTO itemData = itemMapper.toSimpleItemDTO(storedItem);
+        return ResponseEntity.status(HttpStatus.OK).body(itemData);
+    }
+    @GetMapping("items/search")
+    public ResponseEntity<Set<SimpleItemDTO>> filterItems(
+            @RequestParam(required = false,defaultValue = "") String name,
+            @RequestParam(required = false,defaultValue = "") String description
+    ){
+        Set<Item> matchingItems = itemService.filterItems(name,description);
+        Set<SimpleItemDTO> resultData = itemMapper.toSimpleItemDtoSet(matchingItems);
+        return ResponseEntity.status(HttpStatus.OK).body(resultData);
     }
 }
