@@ -1,15 +1,13 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.SimpleUserDTO;
+
 import com.example.demo.dto.UserCredentials;
-import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -41,6 +39,7 @@ public class UserService {
         return password.contentEquals(dbPassword);
     }
 
+    @Transactional
     public User registerUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User registeredUser = userRepository.save(user);
