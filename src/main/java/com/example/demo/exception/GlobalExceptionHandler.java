@@ -1,5 +1,6 @@
 package com.example.demo.exception;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,5 +19,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorMessage> handleUsernameNotFound(UsernameNotFoundException e){
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorMessage("Nombre de usuario incorrecto"));
 
+    }
+    @ExceptionHandler
+    public ResponseEntity<ErrorMessage> hanldeNotFound(EntityNotFoundException e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorMessage(e.getMessage()));
     }
 }
