@@ -5,6 +5,9 @@ import com.example.demo.dto.SimpleContainerDTO;
 import com.example.demo.model.Container;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class ContainerMapper {
 
@@ -26,5 +29,12 @@ public class ContainerMapper {
             storedContainer.setDescription(changedData.getDescription());
         if(changedData.getName() != null)
             storedContainer.setName(changedData.getName());
+    }
+    public List<SimpleContainerDTO> toSimpleDTOList(List<Container> containers){
+        List<SimpleContainerDTO> dtos = new ArrayList<>();
+        for(Container c : containers){
+            dtos.add(this.toSimpleDTO(c));
+        }
+        return dtos;
     }
 }

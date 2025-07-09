@@ -8,6 +8,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -17,6 +18,12 @@ public class ContainerService {
     public ContainerService(ContainerRepository containerRepository, ContainerMapper containerMapper){
         this.containerRepository = containerRepository;
         this.containerMapper = containerMapper;
+    }
+    public List<Container> getAllContainers(){
+        List<Container> results = containerRepository.findAll();
+        if(results.isEmpty())
+            throw new EntityNotFoundException("No hay contenedores");
+        return results;
     }
     public Container getContainerById(long id){
         Container storedContainer = containerRepository.getContainerById(id)
