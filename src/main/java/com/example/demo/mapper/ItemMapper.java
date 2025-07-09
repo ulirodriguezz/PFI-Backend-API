@@ -37,4 +37,15 @@ public class ItemMapper {
         }
         return dtos;
     }
+
+    public void mergeChanges(Item item, SimpleItemDTO dto){
+        if(dto.getName() != null)
+            item.setName(dto.getName());
+        if(dto.getDescription() != null)
+            item.setDescription(dto.getDescription());
+        if(dto.getTagId() != null)
+            item.setTagId(dto.getTagId());
+        if(dto.getLocationDescription() != null)
+            item.setLocationDescription(dto.getLocationDescription());
+    }
 }

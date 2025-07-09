@@ -15,4 +15,5 @@ public interface ItemRepository extends JpaRepository<Item,Long> {
     public Optional<Item> getItemById(Long id);
     @Query("SELECT i FROM Item i WHERE i.name LIKE %:name OR i.description LIKE %:name")
     public Set<Item> searchAllByQ(@Param("name") String name, @Param("description") String description);
+    public void deleteById(long id);
 }

@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.Message;
 import com.example.demo.dto.SimpleItemDTO;
 import com.example.demo.mapper.ItemMapper;
 import com.example.demo.model.Item;
@@ -40,5 +41,18 @@ public class ItemController {
         Set<Item> matchingItems = itemService.filterItems(name,description);
         Set<SimpleItemDTO> resultData = itemMapper.toSimpleItemDtoSet(matchingItems);
         return ResponseEntity.status(HttpStatus.OK).body(resultData);
+    }
+
+    @PatchMapping("/items/{itemId}")
+    public ResponseEntity<SimpleItemDTO> updateItem(@PathVariable long ItemId, @RequestBody SimpleItemDTO itemData){
+        Item updatedItem = itemService.updateItem(ItemId,itemData);
+        SimpleItemDTO updatedItemData = itemMapper.toSimpleItemDTO(updatedItem);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedItemData);
+    }
+
+    @DeleteMapping("/items/{itemId}")
+    public ResponseEntity<Message> deleteItem(@PathVariable long itemId){
+        itemService.deleteItem(itemId);
+        return ResponseEntity.status(HttpStatus.OK).body(new Message("Item eliminado"));
     }
 }
