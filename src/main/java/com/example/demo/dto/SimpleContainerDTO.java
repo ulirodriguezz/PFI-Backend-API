@@ -1,23 +1,11 @@
-package com.example.demo.model;
+package com.example.demo.dto;
 
-import jakarta.persistence.*;
-
-import java.util.List;
-
-@Entity
-@Table(name = "containers")
-public class Container {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class SimpleContainerDTO {
     private Long id;
-    @Column(name = "name",nullable = false)
     private String name;
-    @Column(name = "description",nullable = false)
     private String description;
-    //Falta la foto del contenedor
 
-
-    public Container() {
+    public SimpleContainerDTO() {
     }
 
     public Long getId() {
@@ -43,5 +31,4 @@ public class Container {
     public void setDescription(String description) {
         this.description = description;
     }
-
 }

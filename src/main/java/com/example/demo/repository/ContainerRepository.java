@@ -11,5 +11,5 @@ import java.util.Set;
 public interface ContainerRepository extends JpaRepository<Container,Long> {
     Optional<Container> getContainerById(long id);
     Set<Container> getAllByNameContaining(String name);
-
+    void deleteById(long id);
 }
