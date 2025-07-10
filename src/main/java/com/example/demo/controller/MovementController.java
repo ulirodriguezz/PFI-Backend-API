@@ -14,11 +14,8 @@ public class MovementController {
 
     private MovementService movementService;
 
-    private ItemService itemService;
-
     public MovementController(MovementService movementService, ItemService itemService){
         this.movementService = movementService;
-        this.itemService = itemService;
     }
 
     @GetMapping("/items/{itemId}/movements")
@@ -28,9 +25,9 @@ public class MovementController {
     }
 
     @PostMapping("/items/{itemId}/movements")
-    public ResponseEntity<Message> createMovement(@PathVariable long itemId, @RequestBody MovementDTO movementData){
-        itemService.changeItemLocation(itemId,movementData);
-        return ResponseEntity.ok(new Message("Movimiento registrado"));
+    public ResponseEntity<MovementDTO> registerMovement(@PathVariable long itemId, @RequestBody MovementDTO movementData){
+        MovementDTO registeredMovement = movementService.registerNewMovement(itemId,movementData);
+        return ResponseEntity.ok(registeredMovement);
     }
 
     @DeleteMapping("/items/movements/{movementId}")

@@ -45,15 +45,6 @@ public class ItemService {
         Item savedItem = itemRepository.save(newItem);
         return itemMapper.toSimpleItemDTO(savedItem);
     }
-    @Transactional
-    public void changeItemLocation(long itemId, MovementDTO movementData){
-        Item item = itemRepository.getItemById(itemId)
-                .orElseThrow(() -> new EntityNotFoundException("No se encontró el item"));
-        Container destinationContainer = containerRepository.getContainerById(movementData.getContainerId())
-                .orElseThrow(() -> new EntityNotFoundException("No se encontró el container"));
-        item.setContainer(destinationContainer);
-        movementService.addMovement(itemId,movementData);
-    }
 
     public Item getItemById(long id){
         Item item = itemRepository.getItemById(id)

@@ -8,6 +8,7 @@ import com.example.demo.model.Movement;
 import com.example.demo.repository.ContainerRepository;
 import com.example.demo.repository.ItemRepository;
 import com.example.demo.repository.MovementRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -36,13 +37,16 @@ public class MovementService {
         return movementMapper.toMovementDtoList(movements);
     }
     @Transactional
-    public MovementDTO addMovement (long itemId, MovementDTO movementData){
-        Container destinationContainerRef = containerRepository.getReferenceById(movementData.getContainerId());
-        Item itemRef = itemRepository.getReferenceById(itemId);
-        Movement newMovement = movementMapper.toEntity(movementData,destinationContainerRef,itemRef);
+    public MovementDTO registerNewMovement(long itemId, MovementDTO movementData) {
+        Item item = itemRepository.getItemById(itemId)
+                .orElseThrow(() -> new EntityNotFoundException("No se encontró el item"));
+        Container destinationContainer = containerRepository.getContainerById(movementData.getContainerId())
+                .orElseThrow(() -> new EntityNotFoundException("No se encontró el container"));
+        item.setContainer(destinationContainer);
+        Movement newMovement = movementMapper.toEntity(movementData, destinationContainer, item);
         Movement storedMovement = movementRepository.save(newMovement);
+        itemRepository.save(item);
         return movementMapper.toDTO(storedMovement);
-
     }
     @Transactional
     public void deleteMovementById(long movementId){
