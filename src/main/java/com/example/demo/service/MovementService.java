@@ -36,8 +36,8 @@ public class MovementService {
         return movementMapper.toMovementDtoList(movements);
     }
     @Transactional
-    public MovementDTO addMovement (long itemId, long destinationContainerId, MovementDTO movementData){
-        Container destinationContainerRef = containerRepository.getReferenceById(destinationContainerId);
+    public MovementDTO addMovement (long itemId, MovementDTO movementData){
+        Container destinationContainerRef = containerRepository.getReferenceById(movementData.getContainerId());
         Item itemRef = itemRepository.getReferenceById(itemId);
         Movement newMovement = movementMapper.toEntity(movementData,destinationContainerRef,itemRef);
         Movement storedMovement = movementRepository.save(newMovement);
