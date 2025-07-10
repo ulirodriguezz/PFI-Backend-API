@@ -33,9 +33,9 @@ public class ContainerController {
         SimpleContainerDTO containerData = containerMapper.toSimpleDTO(container);
         return ResponseEntity.status(HttpStatus.OK).body(containerData);
     }
-    @GetMapping("/container/search")
+    @GetMapping("/containers/search")
     public ResponseEntity<List<SimpleContainerDTO>> getContainersByQuery(
-            @RequestParam String name
+            @RequestParam(required = false) String name
     ){
         List<Container> results = containerService.getContainersByName(name);
         List<SimpleContainerDTO> resultData = containerMapper.toSimpleDTOList(results);

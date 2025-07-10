@@ -4,20 +4,24 @@ import com.example.demo.dto.SimpleContainerDTO;
 import com.example.demo.mapper.ContainerMapper;
 import com.example.demo.model.Container;
 import com.example.demo.repository.ContainerRepository;
+import com.example.demo.repository.ItemRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class ContainerService {
     private ContainerRepository containerRepository;
     private ContainerMapper containerMapper;
-    public ContainerService(ContainerRepository containerRepository, ContainerMapper containerMapper){
+
+    private ItemRepository itemRepository;
+
+    public ContainerService(ContainerRepository containerRepository, ContainerMapper containerMapper, ItemRepository itemRepository){
         this.containerRepository = containerRepository;
         this.containerMapper = containerMapper;
+        this.itemRepository = itemRepository;
     }
     public List<Container> getAllContainers(){
         List<Container> results = containerRepository.findAll();
@@ -31,7 +35,7 @@ public class ContainerService {
         return storedContainer;
     }
     public List<Container> getContainersByName(String name){
-        List<Container> mathingResults = containerRepository.getAllByNameContaining(name);
+        List<Container> mathingResults = containerRepository.getAllByNameContainingIgnoreCase(name);
         if(mathingResults.isEmpty())
             throw new EntityNotFoundException("No se encontraron contenedores");
         return mathingResults;
@@ -49,6 +53,7 @@ public class ContainerService {
     }
     @Transactional
     public void deleteById(long id){
+        itemRepository.clearContainerReferenceFromItems(id);
         containerRepository.deleteById(id);
     }
 }
