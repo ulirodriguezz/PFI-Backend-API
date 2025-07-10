@@ -21,6 +21,9 @@ public class Item {
     @Column(name = "location_description",nullable = true,length = 255)
     private String locationDescription;
     // Falta la parte de las fotos
+    @ManyToOne()
+    @JoinColumn(name = "container_id",nullable = true)
+    private Container container;
 
 
     public Item() {

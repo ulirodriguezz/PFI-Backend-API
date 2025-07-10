@@ -16,4 +16,7 @@ public interface ItemRepository extends JpaRepository<Item,Long> {
     @Query("SELECT i FROM Item i WHERE i.name LIKE %:name OR i.description LIKE %:name")
     public Set<Item> searchAllByQ(@Param("name") String name, @Param("description") String description);
     public void deleteById(long id);
+
+    @Query("UPDATE FROM Item i SET i.container = null WHERE i.container.id = :containerId")
+    public void clearContainerReferenceFromItems(@Param("containerId") long containerId);
 }
