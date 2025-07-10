@@ -30,8 +30,8 @@ public class ContainerService {
                 .orElseThrow(() -> new EntityNotFoundException("No se encontró el contenedor"));
         return storedContainer;
     }
-    public Set<Container> getContainersByName(String name){
-        Set<Container> mathingResults = containerRepository.getAllByNameContaining(name);
+    public List<Container> getContainersByName(String name){
+        List<Container> mathingResults = containerRepository.getAllByNameContaining(name);
         if(mathingResults.isEmpty())
             throw new EntityNotFoundException("No se encontraron contenedores");
         return mathingResults;
