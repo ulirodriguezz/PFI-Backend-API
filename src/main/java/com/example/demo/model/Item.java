@@ -68,4 +68,12 @@ public class Item {
     public void setLocationDescription(String locationDescription) {
         this.locationDescription = locationDescription;
     }
+
+    public Container getContainer() {
+        return container;
+    }
+
+    public void setContainer(Container container) {
+        this.container = container;
+    }
 }

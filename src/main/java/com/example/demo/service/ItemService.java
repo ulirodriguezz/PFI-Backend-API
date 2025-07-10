@@ -2,26 +2,40 @@ package com.example.demo.service;
 
 import com.example.demo.dto.SimpleItemDTO;
 import com.example.demo.mapper.ItemMapper;
+import com.example.demo.model.Container;
 import com.example.demo.model.Item;
+import com.example.demo.repository.ContainerRepository;
 import com.example.demo.repository.ItemRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
 public class ItemService {
     private ItemRepository itemRepository;
+    private ContainerRepository containerRepository;
     private ItemMapper itemMapper;
-    public ItemService(ItemRepository itemRepository, ItemMapper itemMapper){
+    public ItemService(ItemRepository itemRepository, ItemMapper itemMapper, ContainerRepository containerRepository){
         this.itemRepository = itemRepository;
         this.itemMapper = itemMapper;
+        this.containerRepository = containerRepository;
     }
     @Transactional
     public Item saveItem(Item item){
         Item savedItem = this.itemRepository.save(item);
         return savedItem;
+    }
+    @Transactional
+    public SimpleItemDTO saveItemInContainer(SimpleItemDTO itemData,long containerId){
+        Item newItem = itemMapper.toItemEntity(itemData);
+        Container container = containerRepository.getContainerById(containerId)
+                .orElseThrow(() -> new EntityNotFoundException("No se encontró el contenedor"));
+        newItem.setContainer(container);
+        Item savedItem = itemRepository.save(newItem);
+        return itemMapper.toSimpleItemDTO(savedItem);
     }
 
     public Item getItemById(long id){
@@ -35,8 +49,8 @@ public class ItemService {
         return item;
     }
 
-    public Set<Item> filterItems(String name, String description) {
-        Set<Item> results = itemRepository.searchAllByQ(name,description);
+    public List<Item> filterItems(String name, String description) {
+        List<Item> results = itemRepository.searchAllByQ(name,description);
         if(results.isEmpty())
             throw new EntityNotFoundException("No se encontraron items");
         return results;
@@ -52,5 +66,10 @@ public class ItemService {
                 .orElseThrow(()-> new EntityNotFoundException("No se ecnontró el item"));
         itemMapper.mergeChanges(storedItem,itemData);
         return itemRepository.save(storedItem);
+    }
+
+    public List<SimpleItemDTO> getItemsByContainerId(long containerId) {
+        List<Item> result = itemRepository.getItemByContainerId(containerId);
+        return itemMapper.toSimpleItemDtoList(result);
     }
 }

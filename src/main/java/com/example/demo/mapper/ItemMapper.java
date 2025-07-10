@@ -4,8 +4,8 @@ import com.example.demo.dto.SimpleItemDTO;
 import com.example.demo.model.Item;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class ItemMapper {
@@ -30,8 +30,8 @@ public class ItemMapper {
         return dto;
     }
 
-    public Set<SimpleItemDTO> toSimpleItemDtoSet(Set<Item> matchingItems) {
-        Set<SimpleItemDTO> dtos = new HashSet<>();
+    public List<SimpleItemDTO> toSimpleItemDtoList(List<Item> matchingItems) {
+        List<SimpleItemDTO> dtos = new ArrayList<>();
         for(Item i : matchingItems){
             dtos.add(this.toSimpleItemDTO(i));
         }

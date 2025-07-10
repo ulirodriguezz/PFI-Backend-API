@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -34,12 +35,12 @@ public class ItemController {
         return ResponseEntity.status(HttpStatus.OK).body(itemData);
     }
     @GetMapping("items/search")
-    public ResponseEntity<Set<SimpleItemDTO>> filterItems(
+    public ResponseEntity<List<SimpleItemDTO>> filterItems(
             @RequestParam(required = false,defaultValue = "") String name,
             @RequestParam(required = false,defaultValue = "") String description
     ){
-        Set<Item> matchingItems = itemService.filterItems(name,description);
-        Set<SimpleItemDTO> resultData = itemMapper.toSimpleItemDtoSet(matchingItems);
+        List<Item> matchingItems = itemService.filterItems(name,description);
+        List<SimpleItemDTO> resultData = itemMapper.toSimpleItemDtoList(matchingItems);
         return ResponseEntity.status(HttpStatus.OK).body(resultData);
     }
 
