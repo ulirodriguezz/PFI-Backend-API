@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.Message;
 import com.example.demo.dto.MovementDTO;
+import com.example.demo.service.ItemService;
 import com.example.demo.service.MovementService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +14,11 @@ public class MovementController {
 
     private MovementService movementService;
 
-    public MovementController(MovementService movementService){
+    private ItemService itemService;
+
+    public MovementController(MovementService movementService, ItemService itemService){
         this.movementService = movementService;
+        this.itemService = itemService;
     }
 
     @GetMapping("/items/{itemId}/movements")
@@ -24,9 +28,9 @@ public class MovementController {
     }
 
     @PostMapping("/items/{itemId}/movements")
-    public ResponseEntity<MovementDTO> createMovement(@PathVariable long itemId, @RequestBody MovementDTO movementData){
-        MovementDTO storedMovementData = movementService.addMovement(itemId,movementData);
-        return ResponseEntity.ok(storedMovementData);
+    public ResponseEntity<Message> createMovement(@PathVariable long itemId, @RequestBody MovementDTO movementData){
+        itemService.changeItemLocation(itemId,movementData);
+        return ResponseEntity.ok(new Message("Movimiento registrado"));
     }
 
     @DeleteMapping("/items/movements/{movementId}")

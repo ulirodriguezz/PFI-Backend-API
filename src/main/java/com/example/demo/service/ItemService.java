@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.MovementDTO;
 import com.example.demo.dto.SimpleItemDTO;
 import com.example.demo.mapper.ItemMapper;
 import com.example.demo.model.Container;
@@ -8,6 +9,7 @@ import com.example.demo.repository.ContainerRepository;
 import com.example.demo.repository.ItemRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,10 +20,16 @@ public class ItemService {
     private ItemRepository itemRepository;
     private ContainerRepository containerRepository;
     private ItemMapper itemMapper;
-    public ItemService(ItemRepository itemRepository, ItemMapper itemMapper, ContainerRepository containerRepository){
+
+    private MovementService movementService;
+    public ItemService(ItemRepository itemRepository,
+                       ItemMapper itemMapper,
+                       ContainerRepository containerRepository,
+                       MovementService movementService){
         this.itemRepository = itemRepository;
         this.itemMapper = itemMapper;
         this.containerRepository = containerRepository;
+        this.movementService = movementService;
     }
     @Transactional
     public Item saveItem(Item item){
@@ -36,6 +44,15 @@ public class ItemService {
         newItem.setContainer(container);
         Item savedItem = itemRepository.save(newItem);
         return itemMapper.toSimpleItemDTO(savedItem);
+    }
+    @Transactional
+    public void changeItemLocation(long itemId, MovementDTO movementData){
+        Item item = itemRepository.getItemById(itemId)
+                .orElseThrow(() -> new EntityNotFoundException("No se encontró el item"));
+        Container destinationContainer = containerRepository.getContainerById(movementData.getContainerId())
+                .orElseThrow(() -> new EntityNotFoundException("No se encontró el container"));
+        item.setContainer(destinationContainer);
+        movementService.addMovement(itemId,movementData);
     }
 
     public Item getItemById(long id){
