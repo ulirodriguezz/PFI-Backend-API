@@ -15,6 +15,9 @@ public class Container {
     @Column(name = "description",nullable = false)
     private String description;
     //Falta la foto del contenedor
+    @ManyToOne
+    @JoinColumn(name = "sector_id")
+    private Sector sector;
 
 
     public Container() {
@@ -44,4 +47,11 @@ public class Container {
         this.description = description;
     }
 
+    public Sector getSector() {
+        return sector;
+    }
+
+    public void setSector(Sector sector) {
+        this.sector = sector;
+    }
 }
