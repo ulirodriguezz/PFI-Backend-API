@@ -33,8 +33,16 @@ public class SectorService {
         return sectorMapper.toSectorDTO(sector);
     }
     @Transactional
-    public void deleteSector(long idSector){
-
+    public SectorDTO createSector(SectorDTO sectorData){
+        Sector newSector = sectorMapper.toSectorEntity(sectorData);
+        Sector storedSector = sectorRepository.save(newSector);
+        return sectorMapper.toSectorDTO(storedSector);
     }
+    @Transactional
+    public void deleteSector(long sectorId){
+        containerRepository.clearSectorReferenceFromContainer(sectorId);
+        sectorRepository.deleteById(sectorId);
+    }
+
 
 }
