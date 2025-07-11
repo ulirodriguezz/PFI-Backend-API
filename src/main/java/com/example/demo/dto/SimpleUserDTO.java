@@ -1,8 +1,9 @@
 package com.example.demo.dto;
 
 public class SimpleUserDTO {
+
+    private long id;
     private String username;
-    private String password;
     private String name;
     private String surname;
     private String email;
@@ -10,7 +11,7 @@ public class SimpleUserDTO {
 
     private SimpleUserDTO(Builder builder){
         this.username = builder.username;
-        this.password = builder.password;
+        this.id = builder.id;
         this.name = builder.name;
         this.surname = builder.surname;
         this.email = builder.email;
@@ -20,8 +21,8 @@ public class SimpleUserDTO {
     }
 
     public static class Builder {
+        private long id;
         private String username;
-        private String password;
         private String name;
         private String surname;
         private String email;
@@ -30,8 +31,8 @@ public class SimpleUserDTO {
             this.username = username;
             return this;
         }
-        public Builder password(String password){
-            this.password = password;
+        public Builder id(long id){
+            this.id = id;
             return this;
         }
         public Builder name(String name){
@@ -68,12 +69,12 @@ public class SimpleUserDTO {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public long getId() {
+        return id;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
