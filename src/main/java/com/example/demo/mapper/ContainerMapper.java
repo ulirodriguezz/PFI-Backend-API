@@ -11,11 +11,25 @@ import java.util.List;
 @Component
 public class ContainerMapper {
 
+    private SectorMapper sectorMapper;
+
+    public ContainerMapper(SectorMapper sectorMapper) {
+        this.sectorMapper = sectorMapper;
+    }
+
     public SimpleContainerDTO toSimpleDTO(Container container){
         SimpleContainerDTO dto = new SimpleContainerDTO();
         dto.setId(container.getId());
         dto.setName(container.getName());
         dto.setDescription(container.getDescription());
+        return dto;
+    }
+    public FullContainerDTO toFullContainerDTO(Container container){
+        FullContainerDTO dto = new FullContainerDTO();
+        dto.setId(container.getId());
+        dto.setName(container.getName());
+        dto.setDescription(container.getDescription());
+        dto.setSectorInfo(sectorMapper.toSectorDTO(container.getSector()));
         return dto;
     }
     public Container toContainerEntity(SimpleContainerDTO dto){

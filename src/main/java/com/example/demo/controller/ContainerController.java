@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.FullContainerDTO;
 import com.example.demo.dto.Message;
 import com.example.demo.dto.SimpleContainerDTO;
 import com.example.demo.dto.SimpleItemDTO;
@@ -34,9 +35,9 @@ public class ContainerController {
         return ResponseEntity.status(HttpStatus.OK).body(resultData);
     }
     @GetMapping("/containers/{containerId}")
-    public ResponseEntity<SimpleContainerDTO> getContainerById(@PathVariable long containerId){
+    public ResponseEntity<FullContainerDTO> getContainerById(@PathVariable long containerId){
         Container container = containerService.getContainerById(containerId);
-        SimpleContainerDTO containerData = containerMapper.toSimpleDTO(container);
+        FullContainerDTO containerData = containerMapper.toFullContainerDTO(container);
         return ResponseEntity.status(HttpStatus.OK).body(containerData);
     }
     @GetMapping("/containers/search")
