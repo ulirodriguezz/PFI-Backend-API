@@ -4,10 +4,12 @@ public class SimpleUserDTO {
 
     private long id;
     private String username;
+    private String password;
     private String name;
     private String surname;
     private String email;
     private String token;
+
 
     private SimpleUserDTO(Builder builder){
         this.username = builder.username;
@@ -15,6 +17,7 @@ public class SimpleUserDTO {
         this.name = builder.name;
         this.surname = builder.surname;
         this.email = builder.email;
+        this.password = builder.password;
     }
 
     public SimpleUserDTO() {
@@ -23,12 +26,17 @@ public class SimpleUserDTO {
     public static class Builder {
         private long id;
         private String username;
+        private String password;
         private String name;
         private String surname;
         private String email;
         private String token;
         public Builder username(String username){
             this.username = username;
+            return this;
+        }
+        public Builder password(String password){
+            this.password = password;
             return this;
         }
         public Builder id(long id){
@@ -67,6 +75,14 @@ public class SimpleUserDTO {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public long getId() {
