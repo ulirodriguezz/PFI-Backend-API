@@ -6,6 +6,7 @@ import com.example.demo.model.Sector;
 import com.example.demo.repository.ContainerRepository;
 import com.example.demo.repository.SectorRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class SectorService {
                 .orElseThrow(() -> new EntityNotFoundException("No se encontró el sector"));
         return sectorMapper.toSectorDTO(sector);
     }
+    @Transactional
     public void deleteSector(long idSector){
 
     }
