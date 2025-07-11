@@ -25,7 +25,6 @@ public class Item {
     @JoinColumn(name = "container_id",nullable = true)
     private Container container;
 
-
     public Item() {
     }
 

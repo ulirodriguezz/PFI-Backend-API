@@ -2,6 +2,9 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -15,6 +18,17 @@ public class User {
     private String name;
     private String surname;
     private String email;
+    @ManyToMany
+    @JoinTable(
+            name = "user_favorite_items",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "item_id")
+    )
+    private Set<Item> favoriteItems;
+    @PrePersist
+    public void OnCreate(){
+        this.favoriteItems = new HashSet<>();
+    }
 
     public User() {
     }
