@@ -80,4 +80,12 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public Set<Item> getFavoriteItems() {
+        return favoriteItems;
+    }
+
+    public void setFavoriteItems(Set<Item> favoriteItems) {
+        this.favoriteItems = favoriteItems;
+    }
 }

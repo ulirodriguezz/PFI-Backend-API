@@ -14,6 +14,8 @@ import java.util.Set;
 @Repository
 public interface UserRepository extends JpaRepository<User,Long> {
     Optional<User> findUserByUsername(String username);
+
+    Optional<User> getUserById(long id);
     @Query("SELECT u.favoriteItems FROM User u WHERE u.id = :userId")
     Set<Item> getUserFavoriteItems(@Param("userId") long userId);
 

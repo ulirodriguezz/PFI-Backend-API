@@ -1,12 +1,12 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.ItemFavoritePostDTO;
+import com.example.demo.dto.Message;
 import com.example.demo.dto.SimpleItemDTO;
 import com.example.demo.dto.SimpleUserDTO;
 import com.example.demo.service.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
@@ -27,5 +27,10 @@ public class UserController {
     public ResponseEntity<Set<SimpleItemDTO>>getAllFavoriteItems(@PathVariable long userId){
         Set<SimpleItemDTO> itemList = userService.getUserFavoriteItems(userId);
         return ResponseEntity.ok(itemList);
+    }
+    @PostMapping("/users/{userId}/favorites")
+    public ResponseEntity<Message>getAllFavoriteItems(@PathVariable long userId, @RequestBody ItemFavoritePostDTO itemData){
+        userService.addItemToFavorites(userId,itemData);
+        return ResponseEntity.ok(new Message("Se agregó el item a favoritos"));
     }
 }
