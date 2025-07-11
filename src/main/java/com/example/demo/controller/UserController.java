@@ -29,7 +29,7 @@ public class UserController {
         return ResponseEntity.ok(itemList);
     }
     @PostMapping("/users/{userId}/favorites")
-    public ResponseEntity<Message>getAllFavoriteItems(@PathVariable long userId, @RequestBody ItemFavoritePostDTO itemData){
+    public ResponseEntity<Message>addItemToFavorites(@PathVariable long userId, @RequestBody ItemFavoritePostDTO itemData){
         userService.addItemToFavorites(userId,itemData);
         return ResponseEntity.ok(new Message("Se agregó el item a favoritos"));
     }
