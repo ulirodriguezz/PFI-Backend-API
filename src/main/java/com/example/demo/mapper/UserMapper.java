@@ -20,6 +20,7 @@ public class UserMapper {
                 .name(user.getName())
                 .surname(user.getSurname())
                 .username(user.getUsername())
+                .id(user.getId())
                 .build();
         return dto;
     }
