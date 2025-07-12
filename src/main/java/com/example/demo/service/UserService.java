@@ -3,8 +3,10 @@ package com.example.demo.service;
 
 import com.example.demo.dto.ItemFavoritePostDTO;
 import com.example.demo.dto.SimpleItemDTO;
+import com.example.demo.dto.SimpleUserDTO;
 import com.example.demo.dto.UserCredentials;
 import com.example.demo.mapper.ItemMapper;
+import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.Item;
 import com.example.demo.model.User;
 import com.example.demo.repository.ItemRepository;
@@ -28,12 +30,15 @@ public class UserService {
     private ItemService itemService;
     private ItemMapper itemMapper;
 
-    public UserService(UserRepository userRepository, ItemRepository itemRepository, PasswordEncoder passwordEncoder, ItemService itemService, ItemMapper itemMapper) {
+    private UserMapper userMapper;
+
+    public UserService(UserRepository userRepository, ItemRepository itemRepository, PasswordEncoder passwordEncoder, ItemService itemService, ItemMapper itemMapper, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.itemRepository = itemRepository;
         this.passwordEncoder = passwordEncoder;
         this.itemService = itemService;
         this.itemMapper = itemMapper;
+        this.userMapper = userMapper;
     }
 
     public User getUsernameByCredentials(UserCredentials credentials){
@@ -48,6 +53,13 @@ public class UserService {
             User user = userRepository.findUserByUsername(username)
                     .orElseThrow(() -> new BadCredentialsException("Credenciales invalidas (username)"));
             return user;
+    }
+
+    public SimpleUserDTO getUserById(long id){
+        User user = userRepository.getUserById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        return userMapper.toSimpleUserDTO(user);
+
     }
 
     public Set<SimpleItemDTO> getUserFavoriteItems(long userId){

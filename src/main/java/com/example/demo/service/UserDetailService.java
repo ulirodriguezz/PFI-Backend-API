@@ -1,13 +1,11 @@
 package com.example.demo.service;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
-import jakarta.annotation.PostConstruct;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 
 @Service
 public class UserDetailService implements UserDetailsService {

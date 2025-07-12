@@ -9,14 +9,12 @@ import com.example.demo.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class AuthController {
@@ -52,6 +50,19 @@ public class AuthController {
     public ResponseEntity<SimpleUserDTO> register (@RequestBody SimpleUserDTO newUser){
         User registeredUser = userService.registerUser(userMapper.toUserEntity(newUser));
         return ResponseEntity.status(HttpStatus.OK).body(userMapper.toSimpleUserDTO(registeredUser));
+    }
+    @PostMapping("/auth/validate-token/{userId}")
+    public ResponseEntity<SimpleUserDTO> loginWithToken (@RequestHeader("Authorization") String authHeader,@PathVariable long userId){
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new BadCredentialsException("token invalido");
+        }
+        String token = authHeader.replace("Bearer ","");
+        if(!jwtProvider.validateToken(token))
+            throw new BadCredentialsException("Token invalido");
+
+        SimpleUserDTO loggedUser = userService.getUserById(userId);
+        return ResponseEntity.ok(loggedUser);
     }
 
 }
