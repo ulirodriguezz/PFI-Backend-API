@@ -62,6 +62,7 @@ public class AuthController {
             throw new BadCredentialsException("Token invalido");
 
         SimpleUserDTO loggedUser = userService.getUserById(userId);
+        loggedUser.setToken(token);
         return ResponseEntity.ok(loggedUser);
     }
 
