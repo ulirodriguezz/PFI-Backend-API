@@ -44,9 +44,9 @@ public class ContainerController {
     public ResponseEntity<List<SimpleContainerDTO>> getContainersByQuery(
             @RequestParam(required = false) String name
     ){
-        List<Container> results = containerService.getContainersByName(name);
-        List<SimpleContainerDTO> resultData = containerMapper.toSimpleDTOList(results);
-        return ResponseEntity.ok(resultData);
+
+        List<Container> resultData = this.containerService.getAllContainers();
+        return ResponseEntity.ok(containerMapper.toSimpleDTOList(resultData));
 
     }
     @GetMapping("/containers/{containerId}/items")
