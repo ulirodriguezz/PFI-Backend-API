@@ -15,7 +15,7 @@ public class JwtProvider {
     private final String jwtSecret = Base64.getEncoder().encodeToString("mi-secreto-asdasd-asdasd-asdasd-asdassdd--asdaaada-aa-ghjghj-asdas-qwwwqq-bbbxxa-etyj-sxda-yyusd-sdasda".getBytes());
 
 //    30 minutos por ahora
-    private final long jwtExpiration = 1000 * 60 * 30;
+    private final long jwtExpiration = 1000 * 60 * 30000;
 
     public String generateToken(Authentication auth){
         UserDetails principalUser = (UserDetails) auth.getPrincipal();

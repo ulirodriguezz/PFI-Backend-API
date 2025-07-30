@@ -32,9 +32,11 @@ public class ItemService {
         this.movementService = movementService;
     }
     @Transactional
-    public Item saveItem(Item item){
-        Item savedItem = this.itemRepository.save(item);
-        return savedItem;
+    public SimpleItemDTO saveItem(SimpleItemDTO itemDto){
+        if(itemDto.getContainerId() != null)
+            return this.saveItemInContainer(itemDto,itemDto.getContainerId());
+        Item savedItem = this.itemRepository.save(itemMapper.toItemEntity(itemDto));
+        return itemMapper.toSimpleItemDTO(savedItem);
     }
     @Transactional
     public SimpleItemDTO saveItemInContainer(SimpleItemDTO itemData,long containerId){

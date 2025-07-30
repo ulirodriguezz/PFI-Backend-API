@@ -1,10 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.Message;
-import com.example.demo.dto.MovementDTO;
 import com.example.demo.dto.SimpleItemDTO;
 import com.example.demo.mapper.ItemMapper;
-import com.example.demo.mapper.MovementMapper;
 import com.example.demo.model.Item;
 import com.example.demo.service.ItemService;
 import com.example.demo.service.MovementService;
@@ -29,10 +27,8 @@ public class ItemController {
 
     @PostMapping("/items")
     public ResponseEntity<SimpleItemDTO> saveItem(@RequestBody SimpleItemDTO itemData){
-        Item newItem = itemMapper.toItemEntity(itemData);
-        Item storedItem =itemService.saveItem(newItem);
-        SimpleItemDTO storedItemData = itemMapper.toSimpleItemDTO(storedItem);
-        return ResponseEntity.status(HttpStatus.OK).body(storedItemData);
+        SimpleItemDTO storedItem = itemService.saveItem(itemData);
+        return ResponseEntity.status(HttpStatus.OK).body(storedItem);
     }
     @GetMapping("/items/{itemId}")
     public ResponseEntity<SimpleItemDTO> getItemById(@PathVariable long itemId){

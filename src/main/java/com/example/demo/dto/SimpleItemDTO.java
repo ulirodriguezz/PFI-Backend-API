@@ -11,24 +11,32 @@ public class SimpleItemDTO {
 
     private String locationDescription;
 
+    private Long containerId;
+
+    public SimpleItemDTO(Long id, String tagId, String name, String description, String locationDescription, Long containerId) {
+        this.id = id;
+        this.tagId = tagId;
+        this.name = name;
+        this.description = description;
+        this.locationDescription = locationDescription;
+        this.containerId = containerId;
+    }
     public SimpleItemDTO(Builder builder){
         this.id = builder.id;
         this.tagId = builder.tagId;
         this.name = builder.name;
         this.description = builder.description;
         this.locationDescription = builder.locationDescription;
+        this.containerId = builder.containerId;
     }
 
     public static class Builder{
         private Long id;
-
         private String tagId;
-
         private String name;
-
         private String description;
-
         private String locationDescription;
+        private Long containerId;
         public Builder id(Long id){
             this.id = id;
             return this;
@@ -47,6 +55,10 @@ public class SimpleItemDTO {
         }
         public Builder locationDescription(String locationDescription){
             this.locationDescription = locationDescription;
+            return this;
+        }
+        public Builder containerId(Long containerId){
+            this.containerId = containerId;
             return this;
         }
         public SimpleItemDTO build(){
@@ -96,5 +108,13 @@ public class SimpleItemDTO {
 
     public void setLocationDescription(String locationDescription) {
         this.locationDescription = locationDescription;
+    }
+
+    public Long getContainerId() {
+        return containerId;
+    }
+
+    public void setContainerId(Long containerId) {
+        this.containerId = containerId;
     }
 }
