@@ -16,6 +16,8 @@ public class SectorMapper {
         return sector;
     }
     public SectorDTO toSectorDTO(Sector sector){
+        if(sector == null)
+            return null;
         SectorDTO dto = new SectorDTO();
         dto.setId(sector.getId());
         dto.setDescription(sector.getDescription());

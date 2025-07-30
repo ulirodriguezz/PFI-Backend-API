@@ -1,26 +1,32 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.Message;
+import com.example.demo.dto.MovementDTO;
 import com.example.demo.dto.SimpleItemDTO;
 import com.example.demo.mapper.ItemMapper;
+import com.example.demo.mapper.MovementMapper;
 import com.example.demo.model.Item;
 import com.example.demo.service.ItemService;
+import com.example.demo.service.MovementService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 @RestController
 public class ItemController {
 
     private final ItemService itemService;
     private final ItemMapper itemMapper;
-    public ItemController(ItemService itemService, ItemMapper itemMapper){
+    private final MovementService movementService;
+
+    public ItemController(ItemService itemService, ItemMapper itemMapper, MovementService movementService) {
         this.itemService = itemService;
         this.itemMapper = itemMapper;
+        this.movementService = movementService;
     }
+
     @PostMapping("/items")
     public ResponseEntity<SimpleItemDTO> saveItem(@RequestBody SimpleItemDTO itemData){
         Item newItem = itemMapper.toItemEntity(itemData);
@@ -56,4 +62,6 @@ public class ItemController {
         itemService.deleteItem(itemId);
         return ResponseEntity.status(HttpStatus.OK).body(new Message("Item eliminado"));
     }
+
+
 }
