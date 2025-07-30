@@ -14,15 +14,12 @@ import java.util.Set;
 @RestController
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
     public UserController (UserService userService) {
         this.userService = userService;
     }
 
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
     @GetMapping("/users/{userId}/favorites")
     public ResponseEntity<Set<SimpleItemDTO>>getAllFavoriteItems(@PathVariable long userId){
         Set<SimpleItemDTO> itemList = userService.getUserFavoriteItems(userId);

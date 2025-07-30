@@ -15,8 +15,8 @@ import java.util.Set;
 @RestController
 public class ItemController {
 
-    ItemService itemService;
-    ItemMapper itemMapper;
+    private final ItemService itemService;
+    private final ItemMapper itemMapper;
     public ItemController(ItemService itemService, ItemMapper itemMapper){
         this.itemService = itemService;
         this.itemMapper = itemMapper;

@@ -19,9 +19,9 @@ import java.util.List;
 @RestController
 public class ContainerController {
 
-    private ContainerService containerService;
-    private ContainerMapper containerMapper;
-    private ItemService itemService;
+    private final ContainerService containerService;
+    private final ContainerMapper containerMapper;
+    private final ItemService itemService;
 
     public ContainerController(ContainerService containerService, ContainerMapper containerMapper, ItemService itemService){
         this.containerMapper = containerMapper;

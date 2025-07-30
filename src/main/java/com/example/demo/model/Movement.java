@@ -1,7 +1,9 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Entity
@@ -17,14 +19,10 @@ public class Movement {
     @JoinColumn(name = "container_id",nullable = false)
     private Container destinationContainer;
     @Column(nullable = false)
-    private LocalDateTime timestamp;
+    @CreationTimestamp
+    private Instant timestamp;
 
     public Movement() {
-    }
-
-    @PrePersist
-    public void onCreate(){
-        this.timestamp = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -51,11 +49,11 @@ public class Movement {
         this.destinationContainer = destinationContainer;
     }
 
-    public LocalDateTime getTimestamp() {
+    public Instant getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(LocalDateTime timestamp) {
+    public void setTimestamp(Instant timestamp) {
         this.timestamp = timestamp;
     }
 }

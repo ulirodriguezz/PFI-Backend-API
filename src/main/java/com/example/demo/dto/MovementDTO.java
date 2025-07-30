@@ -1,5 +1,6 @@
 package com.example.demo.dto;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 public class MovementDTO {
@@ -7,7 +8,7 @@ public class MovementDTO {
     private long id;
     private long itemId;
     private long containerId;
-    private LocalDateTime timestamp;
+    private Instant timestamp;
 
     public MovementDTO() {
     }
@@ -36,11 +37,5 @@ public class MovementDTO {
         this.containerId = containerId;
     }
 
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
 
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
 }

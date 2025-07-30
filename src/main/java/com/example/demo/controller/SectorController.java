@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 public class SectorController {
 
-    private SectorService sectorService;
+    private final SectorService sectorService;
 
     public SectorController(SectorService sectorService) {
         this.sectorService = sectorService;
@@ -41,5 +41,10 @@ public class SectorController {
         sectorService.deleteSector(sectorId);
         return ResponseEntity.ok(new Message("Sector eliminado"));
     }
+
+    // GET ALL CONTAINERS FROM A SECTOR
+    // POST A CONTAINER DIRECTLY IN A SECTOR
+
+
 
 }

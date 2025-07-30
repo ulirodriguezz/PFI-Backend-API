@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 public class MovementController {
 
-    private MovementService movementService;
+    private final MovementService movementService;
 
     public MovementController(MovementService movementService, ItemService itemService){
         this.movementService = movementService;
