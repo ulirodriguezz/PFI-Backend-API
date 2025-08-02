@@ -1,5 +1,6 @@
 package com.example.demo.mapper;
 
+import com.example.demo.dto.ContainerPreviewDTO;
 import com.example.demo.dto.FullContainerDTO;
 import com.example.demo.dto.SimpleContainerDTO;
 import com.example.demo.model.Container;
@@ -29,7 +30,7 @@ public class ContainerMapper {
         dto.setId(container.getId());
         dto.setName(container.getName());
         dto.setDescription(container.getDescription());
-        dto.setSectorInfo(sectorMapper.toSectorDTO(container.getSector()));
+        dto.setSectorInfo(sectorMapper.toSimpleSectorDTO(container.getSector()));
         return dto;
     }
     public Container toContainerEntity(SimpleContainerDTO dto){
@@ -51,4 +52,22 @@ public class ContainerMapper {
         }
         return dtos;
     }
+    public ContainerPreviewDTO toContainerPreviewDTO(Container container){
+        ContainerPreviewDTO dto = new ContainerPreviewDTO();
+        dto.setId(container.getId());
+        dto.setName(container.getName());
+
+        return dto;
+    }
+
+    public List<ContainerPreviewDTO> toContainerPreviewList(List<Container> containers){
+        List<ContainerPreviewDTO> dtos = new ArrayList<>();
+
+        for(Container c : containers){
+            dtos.add(this.toContainerPreviewDTO(c));
+        }
+
+        return dtos;
+    }
+
 }

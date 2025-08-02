@@ -5,9 +5,7 @@ import com.example.demo.dto.Message;
 import com.example.demo.dto.SimpleContainerDTO;
 import com.example.demo.dto.SimpleItemDTO;
 import com.example.demo.mapper.ContainerMapper;
-import com.example.demo.mapper.ItemMapper;
 import com.example.demo.model.Container;
-import com.example.demo.model.Item;
 import com.example.demo.service.ContainerService;
 import com.example.demo.service.ItemService;
 import org.springframework.http.HttpStatus;
@@ -36,19 +34,24 @@ public class ContainerController {
     }
     @GetMapping("/containers/{containerId}")
     public ResponseEntity<FullContainerDTO> getContainerById(@PathVariable long containerId){
-        Container container = containerService.getContainerById(containerId);
-        FullContainerDTO containerData = containerMapper.toFullContainerDTO(container);
+        FullContainerDTO containerData = containerService.getContainerById(containerId);
         return ResponseEntity.status(HttpStatus.OK).body(containerData);
     }
     @GetMapping("/containers/search")
     public ResponseEntity<List<SimpleContainerDTO>> getContainersByQuery(
             @RequestParam(required = false) String name
     ){
-
         List<Container> resultData = this.containerService.getAllContainers();
         return ResponseEntity.ok(containerMapper.toSimpleDTOList(resultData));
-
     }
+
+    @PostMapping("/containers/{containerId}/items")
+    public ResponseEntity<SimpleItemDTO> createItemInContainer(@RequestBody SimpleItemDTO itemData,
+                                                               @PathVariable long containerId){
+        SimpleItemDTO savedItemData = itemService.saveItemInContainer(itemData,containerId);
+        return ResponseEntity.ok(savedItemData);
+    }
+
     @GetMapping("/containers/{containerId}/items")
     public ResponseEntity<List<SimpleItemDTO>> getItemFromContainerId(@PathVariable long containerId){
         List<SimpleItemDTO> itemList = itemService.getItemsByContainerId(containerId);
@@ -60,14 +63,8 @@ public class ContainerController {
         SimpleContainerDTO newContainerData = containerMapper.toSimpleDTO(newContainer);
         return ResponseEntity.ok(newContainerData);
     }
-    @PostMapping("/containers/{containerId}/items")
-    public ResponseEntity<SimpleItemDTO> createItemInContainer(@RequestBody SimpleItemDTO itemData,
-                                                              @PathVariable long containerId){
-        SimpleItemDTO savedItemData = itemService.saveItemInContainer(itemData,containerId);
-        return ResponseEntity.ok(savedItemData);
-    }
 
-        @PatchMapping("/containers/{containerId}")
+    @PatchMapping("/containers/{containerId}")
     public ResponseEntity<SimpleContainerDTO> updateContainer(@RequestBody SimpleContainerDTO changedData,
                                                               @PathVariable long containerId){
         Container updatedContainer = containerService.updateContainer(containerId,changedData);

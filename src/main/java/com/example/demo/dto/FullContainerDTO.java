@@ -1,25 +1,27 @@
 package com.example.demo.dto;
 
-import java.util.Set;
+import java.util.List;
 
 public class FullContainerDTO extends SimpleContainerDTO {
-    private Set<SimpleItemDTO> items;
-    private SectorDTO sectorInfo;
+    private List<ItemPreviewDTO> items;
+    private SimpleSectorDTO sectorInfo;
 
     public FullContainerDTO() {
     }
-    public Set<SimpleItemDTO> getItems() {
+
+    public List<ItemPreviewDTO> getItems() {
         return items;
     }
-    public void setItems(Set<SimpleItemDTO> items) {
+
+    public void setItems(List<ItemPreviewDTO> items) {
         this.items = items;
     }
 
-    public SectorDTO getSectorInfo() {
+    public SimpleSectorDTO getSectorInfo() {
         return sectorInfo;
     }
 
-    public void setSectorInfo(SectorDTO sectorInfo) {
+    public void setSectorInfo(SimpleSectorDTO sectorInfo) {
         this.sectorInfo = sectorInfo;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.demo.mapper;
 
+import com.example.demo.dto.ItemPreviewDTO;
 import com.example.demo.dto.SimpleItemDTO;
 import com.example.demo.model.Item;
 import org.springframework.stereotype.Component;
@@ -34,6 +35,21 @@ public class ItemMapper {
         List<SimpleItemDTO> dtos = new ArrayList<>();
         for(Item i : matchingItems){
             dtos.add(this.toSimpleItemDTO(i));
+        }
+        return dtos;
+    }
+
+    public ItemPreviewDTO toItemPreviewDTO(Item item){
+        ItemPreviewDTO dto = new ItemPreviewDTO();
+        dto.setId(item.getId());
+        dto.setName(dto.getName());
+        return dto;
+    }
+
+    public List<ItemPreviewDTO> toItemPreviewList(List<Item> items){
+        List<ItemPreviewDTO> dtos = new ArrayList<>();
+        for(Item i : items){
+            dtos.add(this.toItemPreviewDTO(i));
         }
         return dtos;
     }
