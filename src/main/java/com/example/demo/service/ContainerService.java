@@ -66,6 +66,9 @@ public class ContainerService {
         Container oldContainer = containerRepository.getContainerById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No se encontró el contenedor"));
         containerMapper.mergeChanges(oldContainer,changedData);
+        if(changedData.getSectorId() != null)
+            this.changeContainerSector(oldContainer,changedData.getSectorId());
+
         return containerRepository.save(oldContainer);
     }
     @Transactional
@@ -85,4 +88,11 @@ public class ContainerService {
         return containerMapper.toSimpleDTO(storedContainer);
 
     }
+
+    private void changeContainerSector(Container container, Long sectorId){
+        Sector destinationSector = sectorRepository.getSectorById(sectorId)
+                .orElseThrow(() -> new EntityNotFoundException("Sector Not Found"));
+        container.setSector(destinationSector);
+    }
+
 }

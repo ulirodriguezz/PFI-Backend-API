@@ -23,6 +23,8 @@ public class ContainerMapper {
         dto.setId(container.getId());
         dto.setName(container.getName());
         dto.setDescription(container.getDescription());
+        if(container.getSector() != null)
+            dto.setSectorId(container.getSector().getId());
         return dto;
     }
     public FullContainerDTO toFullContainerDTO(Container container){
@@ -31,6 +33,8 @@ public class ContainerMapper {
         dto.setName(container.getName());
         dto.setDescription(container.getDescription());
         dto.setSectorInfo(sectorMapper.toSimpleSectorDTO(container.getSector()));
+        if(container.getSector() != null)
+            dto.setSectorId(container.getSector().getId());
         return dto;
     }
     public Container toContainerEntity(SimpleContainerDTO dto){

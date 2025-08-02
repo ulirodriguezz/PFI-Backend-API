@@ -4,6 +4,7 @@ public class SimpleContainerDTO {
     private Long id;
     private String name;
     private String description;
+    private Long sectorId;
 
     public SimpleContainerDTO() {
     }
@@ -30,5 +31,13 @@ public class SimpleContainerDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Long getSectorId() {
+        return sectorId;
+    }
+
+    public void setSectorId(Long sectorId) {
+        this.sectorId = sectorId;
     }
 }
