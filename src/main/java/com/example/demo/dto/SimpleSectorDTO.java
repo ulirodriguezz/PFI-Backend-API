@@ -1,11 +1,11 @@
 package com.example.demo.dto;
 
-public class SectorDTO {
+public class SimpleSectorDTO {
     private Long id;
     private String name;
     private String description;
 
-    public SectorDTO() {
+    public SimpleSectorDTO() {
     }
 
     public Long getId() {

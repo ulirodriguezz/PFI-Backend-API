@@ -1,6 +1,4 @@
 package com.example.demo.service;
-
-import com.example.demo.dto.MovementDTO;
 import com.example.demo.dto.SimpleItemDTO;
 import com.example.demo.mapper.ItemMapper;
 import com.example.demo.model.Container;
@@ -9,11 +7,9 @@ import com.example.demo.repository.ContainerRepository;
 import com.example.demo.repository.ItemRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class ItemService {

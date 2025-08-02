@@ -1,6 +1,9 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.SectorDTO;
+import com.example.demo.dto.FullContainerDTO;
+import com.example.demo.dto.FullSectorDTO;
+import com.example.demo.dto.SimpleSectorDTO;
+import com.example.demo.mapper.ContainerMapper;
 import com.example.demo.mapper.SectorMapper;
 import com.example.demo.model.Sector;
 import com.example.demo.repository.ContainerRepository;
@@ -14,29 +17,36 @@ import java.util.List;
 @Service
 public class SectorService {
     private SectorRepository sectorRepository;
-    private ContainerRepository containerRepository;
     private SectorMapper sectorMapper;
+    private ContainerRepository containerRepository;
+    private ContainerMapper containerMapper;
 
-    public SectorService(SectorRepository sectorRepository, ContainerRepository containerRepository, SectorMapper sectorMapper) {
+    private ContainerService containerService;
+
+    public SectorService(SectorRepository sectorRepository, ContainerRepository containerRepository, SectorMapper sectorMapper, ContainerMapper containerMapper) {
         this.sectorRepository = sectorRepository;
         this.containerRepository = containerRepository;
         this.sectorMapper = sectorMapper;
+        this.containerMapper = containerMapper;
     }
 
-    public List<SectorDTO> getAllSectors(){
+    public List<SimpleSectorDTO> getAllSectors(){
         List<Sector> sectorsList = sectorRepository.findAll();
-        return sectorMapper.toSectorDtoList(sectorsList);
-    }
-    public SectorDTO getSectorById(long sectorId){
-        Sector sector = sectorRepository.getSectorById(sectorId)
-                .orElseThrow(() -> new EntityNotFoundException("No se encontró el sector"));
-        return sectorMapper.toSectorDTO(sector);
+        return sectorMapper.toSimpleSectorDtoList(sectorsList);
     }
     @Transactional
-    public SectorDTO createSector(SectorDTO sectorData){
+    public FullSectorDTO getSectorById(long sectorId){
+        Sector sector = sectorRepository.getSectorById(sectorId)
+                .orElseThrow(() -> new EntityNotFoundException("No se encontró el sector"));
+        FullSectorDTO dto = sectorMapper.toFullSectorDTO(sector);
+        dto.setContainers(containerMapper.toContainerPreviewList(containerRepository.getAllBySector(sector)));
+        return dto;
+    }
+    @Transactional
+    public SimpleSectorDTO createSector(SimpleSectorDTO sectorData){
         Sector newSector = sectorMapper.toSectorEntity(sectorData);
         Sector storedSector = sectorRepository.save(newSector);
-        return sectorMapper.toSectorDTO(storedSector);
+        return sectorMapper.toSimpleSectorDTO(storedSector);
     }
     @Transactional
     public void deleteSector(long sectorId){

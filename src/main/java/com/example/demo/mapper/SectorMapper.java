@@ -1,6 +1,7 @@
 package com.example.demo.mapper;
 
-import com.example.demo.dto.SectorDTO;
+import com.example.demo.dto.FullSectorDTO;
+import com.example.demo.dto.SimpleSectorDTO;
 import com.example.demo.model.Sector;
 import org.springframework.stereotype.Component;
 
@@ -9,26 +10,36 @@ import java.util.List;
 
 @Component
 public class SectorMapper {
-    public Sector toSectorEntity(SectorDTO dto){
+    public Sector toSectorEntity(SimpleSectorDTO dto){
         Sector sector = new Sector();
         sector.setDescription(dto.getDescription());
         sector.setName(dto.getName());
         return sector;
     }
-    public SectorDTO toSectorDTO(Sector sector){
+    public SimpleSectorDTO toSimpleSectorDTO(Sector sector){
         if(sector == null)
             return null;
-        SectorDTO dto = new SectorDTO();
+        SimpleSectorDTO dto = new SimpleSectorDTO();
         dto.setId(sector.getId());
         dto.setDescription(sector.getDescription());
         dto.setName(sector.getName());
         return dto;
     }
 
-    public List<SectorDTO> toSectorDtoList(List<Sector> sectorList){
-        List<SectorDTO> dtos = new ArrayList<>();
+    public FullSectorDTO toFullSectorDTO (Sector sector){
+        if(sector == null)
+            return null;
+        FullSectorDTO dto = new FullSectorDTO();
+        dto.setId(sector.getId());
+        dto.setDescription(sector.getDescription());
+        dto.setName(sector.getName());
+        return dto;
+    }
+
+    public List<SimpleSectorDTO> toSimpleSectorDtoList(List<Sector> sectorList){
+        List<SimpleSectorDTO> dtos = new ArrayList<>();
         for(Sector s : sectorList){
-            dtos.add(this.toSectorDTO(s));
+            dtos.add(this.toSimpleSectorDTO(s));
         }
         return dtos;
     }
