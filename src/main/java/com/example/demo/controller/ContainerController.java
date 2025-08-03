@@ -45,13 +45,6 @@ public class ContainerController {
         return ResponseEntity.ok(containerMapper.toSimpleDTOList(resultData));
     }
 
-    @PostMapping("/containers/{containerId}/items")
-    public ResponseEntity<SimpleItemDTO> createItemInContainer(@RequestBody SimpleItemDTO itemData,
-                                                               @PathVariable long containerId){
-        SimpleItemDTO savedItemData = itemService.saveItemInContainer(itemData,containerId);
-        return ResponseEntity.ok(savedItemData);
-    }
-
     @GetMapping("/containers/{containerId}/items")
     public ResponseEntity<List<SimpleItemDTO>> getItemFromContainerId(@PathVariable long containerId){
         List<SimpleItemDTO> itemList = itemService.getItemsByContainerId(containerId);
@@ -59,9 +52,14 @@ public class ContainerController {
     }
     @PostMapping("/containers")
     public ResponseEntity<SimpleContainerDTO> createContainer(@RequestBody SimpleContainerDTO containerData){
-        Container newContainer = containerService.save(containerMapper.toContainerEntity(containerData));
-        SimpleContainerDTO newContainerData = containerMapper.toSimpleDTO(newContainer);
-        return ResponseEntity.ok(newContainerData);
+        SimpleContainerDTO result;
+        if(containerData.getSectorId() != null)
+        {
+           result = containerService.saveContainerInSector(containerData.getSectorId(),containerData);
+        }else {
+            result = containerService.save(containerData);
+        }
+        return ResponseEntity.ok(result);
     }
 
     @PatchMapping("/containers/{containerId}")

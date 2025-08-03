@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.FullContainerDTO;
 import com.example.demo.dto.SimpleContainerDTO;
+import com.example.demo.dto.SimpleSectorDTO;
 import com.example.demo.mapper.ContainerMapper;
 import com.example.demo.mapper.ItemMapper;
 import com.example.demo.model.Container;
@@ -58,8 +59,9 @@ public class ContainerService {
         return mathingResults;
     }
     @Transactional
-    public Container save (Container newContainer){
-        return containerRepository.save(newContainer);
+    public SimpleContainerDTO save (SimpleContainerDTO newContainerData){
+        Container newContainer = containerMapper.toContainerEntity(newContainerData);
+        return containerMapper.toSimpleDTO(containerRepository.save(newContainer));
     }
     @Transactional
     public Container updateContainer(long id, SimpleContainerDTO changedData){

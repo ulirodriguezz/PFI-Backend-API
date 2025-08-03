@@ -28,6 +28,8 @@ public class ItemMapper {
                 .locationDescription(item.getLocationDescription())
                 .tagId(item.getTagId())
                 .build();
+        if(item.getContainer() != null)
+            dto.setContainerId(item.getContainer().getId());
         return dto;
     }
 

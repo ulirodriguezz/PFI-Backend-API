@@ -23,6 +23,7 @@ public class SectorMapper {
         dto.setId(sector.getId());
         dto.setDescription(sector.getDescription());
         dto.setName(sector.getName());
+        dto.setSectorId(sector.getId());
         return dto;
     }
 

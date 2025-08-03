@@ -36,13 +36,6 @@ public class SectorController {
         FullSectorDTO sectorData = sectorService.getSectorById(sectorId);
         return ResponseEntity.ok(sectorData);
     }
-    @PostMapping("/sectors/{sectorId}/containers")
-    public ResponseEntity<SimpleContainerDTO> creaeteContainerInSector(@PathVariable long sectorId,@RequestBody SimpleContainerDTO containerData){
-        SimpleContainerDTO containerDTO = containerService.saveContainerInSector(sectorId,containerData);
-
-        return ResponseEntity.ok(containerDTO);
-    }
-
 
     @DeleteMapping("/sectors/{sectorId}")
     public ResponseEntity<Message> deleteSector(@PathVariable long sectorId){
