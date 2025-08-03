@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import com.example.demo.types.UserRoleType;
 import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +36,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/register","/login").permitAll()
+                        .requestMatchers("/items/**").hasAuthority(UserRoleType.ADMIN.toString())
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
