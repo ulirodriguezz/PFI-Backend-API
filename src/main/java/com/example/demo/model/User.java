@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.example.demo.types.UserRoleType;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -18,6 +19,8 @@ public class User {
     private String name;
     private String surname;
     private String email;
+    @Enumerated(EnumType.STRING)
+    private UserRoleType role;
     @ManyToMany
     @JoinTable(
             name = "user_favorite_items",
@@ -28,6 +31,7 @@ public class User {
     @PrePersist
     public void OnCreate(){
         this.favoriteItems = new HashSet<>();
+        this.role = UserRoleType.USER;
     }
 
     public User() {
@@ -87,5 +91,13 @@ public class User {
 
     public void setFavoriteItems(Set<Item> favoriteItems) {
         this.favoriteItems = favoriteItems;
+    }
+
+    public UserRoleType getRole() {
+        return role;
+    }
+
+    public void setRole(UserRoleType role) {
+        this.role = role;
     }
 }
