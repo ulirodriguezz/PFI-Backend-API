@@ -25,6 +25,12 @@ public class SectorController {
         List<SimpleSectorDTO> resultList = sectorService.getAllSectors();
         return ResponseEntity.ok(resultList);
     }
+    @PostMapping("/sectors")
+    public ResponseEntity<SimpleSectorDTO> createSector(@RequestBody SimpleSectorDTO sectorData){
+        SimpleSectorDTO newSector = sectorService.createSector(sectorData);
+        return ResponseEntity.ok(newSector);
+    }
+
     @GetMapping("/sectors/{sectorId}")
     public ResponseEntity<FullSectorDTO> getSectorById(@PathVariable long sectorId){
         FullSectorDTO sectorData = sectorService.getSectorById(sectorId);
@@ -37,11 +43,6 @@ public class SectorController {
         return ResponseEntity.ok(containerDTO);
     }
 
-    @PostMapping("/sectors")
-    public ResponseEntity<SimpleSectorDTO> createSector(@RequestBody SimpleSectorDTO sectorData){
-        SimpleSectorDTO newSector = sectorService.createSector(sectorData);
-        return ResponseEntity.ok(newSector);
-    }
 
     @DeleteMapping("/sectors/{sectorId}")
     public ResponseEntity<Message> deleteSector(@PathVariable long sectorId){
@@ -49,8 +50,6 @@ public class SectorController {
         return ResponseEntity.ok(new Message("Sector eliminado"));
     }
 
-    // GET ALL CONTAINERS FROM A SECTOR
-    // POST A CONTAINER DIRECTLY IN A SECTOR
 
 
 

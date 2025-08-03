@@ -42,7 +42,7 @@ public class ItemMapper {
     public ItemPreviewDTO toItemPreviewDTO(Item item){
         ItemPreviewDTO dto = new ItemPreviewDTO();
         dto.setId(item.getId());
-        dto.setName(dto.getName());
+        dto.setName(item.getName());
         return dto;
     }
 
