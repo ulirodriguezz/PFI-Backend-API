@@ -36,6 +36,11 @@ public class SectorController {
         FullSectorDTO sectorData = sectorService.getSectorById(sectorId);
         return ResponseEntity.ok(sectorData);
     }
+    @PatchMapping("/sectors/{sectorId}")
+    public ResponseEntity<SimpleSectorDTO> updateSector(@PathVariable long sectorId,@RequestBody SimpleSectorDTO updatedSectorData){
+        SimpleSectorDTO updatedSector = sectorService.patchSector(sectorId,updatedSectorData);
+        return ResponseEntity.ok(updatedSector);
+    }
 
     @DeleteMapping("/sectors/{sectorId}")
     public ResponseEntity<Message> deleteSector(@PathVariable long sectorId){

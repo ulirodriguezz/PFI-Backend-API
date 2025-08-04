@@ -55,4 +55,13 @@ public class SectorService {
     }
 
 
+    public SimpleSectorDTO patchSector(long sectorId,SimpleSectorDTO updatedSectorData) {
+        Sector sectorInDB = sectorRepository.getSectorById(sectorId)
+                .orElseThrow(() -> new EntityNotFoundException("No se ecnontro el Sector"));
+        sectorMapper.mergeChanges(sectorInDB,updatedSectorData);
+
+        Sector updatedSector = sectorRepository.save(sectorInDB);
+        return sectorMapper.toSimpleSectorDTO(updatedSector);
+
+    }
 }

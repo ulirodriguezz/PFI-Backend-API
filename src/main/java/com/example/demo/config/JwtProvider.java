@@ -2,6 +2,7 @@ package com.example.demo.config;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -61,5 +62,11 @@ public class JwtProvider {
         }catch (Exception e){
             return false;
         }
+    }
+    public String getTokenFromHeader(String authHeader) {
+        if(authHeader != null && authHeader.startsWith("Bearer ")){
+            return authHeader.replace("Bearer ","");
+        }
+        return null;
     }
 }

@@ -1,10 +1,7 @@
 package com.example.demo.service;
 
 
-import com.example.demo.dto.ItemFavoritePostDTO;
-import com.example.demo.dto.SimpleItemDTO;
-import com.example.demo.dto.SimpleUserDTO;
-import com.example.demo.dto.UserCredentials;
+import com.example.demo.dto.*;
 import com.example.demo.mapper.ItemMapper;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.Item;
@@ -55,6 +52,12 @@ public class UserService {
             return user;
     }
 
+    public UserProfileDTO getUserInfoByUsername(String username){
+        User user = userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User Not Found"));
+        return userMapper.toUserProfileDTO(user);
+    }
+
     public SimpleUserDTO getUserById(long id){
         User user = userRepository.getUserById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
@@ -77,7 +80,7 @@ public class UserService {
     private boolean validCredentials(String password,String dbPassword){
         return password.contentEquals(dbPassword);
     }
-
+    @Transactional
     public void addItemToFavorites(long userId, ItemFavoritePostDTO itemData) {
         Item item = itemRepository.getItemById(itemData.getItemId())
                 .orElseThrow(() -> new EntityNotFoundException("No se encontró el item"));
@@ -86,4 +89,15 @@ public class UserService {
         user.getFavoriteItems().add(item);
         userRepository.save(user);
     }
+    public void removeItemFromFavorites (String loggedUsername, long itemId){
+        Item item = itemRepository.getItemById(itemId)
+                .orElseThrow(() -> new EntityNotFoundException("No se encontro el item"));
+        User user = userRepository.findUserByUsername(loggedUsername)
+                .orElseThrow(() -> new EntityNotFoundException("No se encontro al usuario"));
+
+        user.getFavoriteItems().remove(item);
+        userRepository.save(user);
+    }
+
+
 }

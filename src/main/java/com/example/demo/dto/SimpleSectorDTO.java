@@ -5,8 +5,6 @@ public class SimpleSectorDTO {
     private String name;
     private String description;
 
-    private Long sectorId;
-
     public SimpleSectorDTO() {
     }
 
@@ -34,11 +32,5 @@ public class SimpleSectorDTO {
         this.description = description;
     }
 
-    public Long getSectorId() {
-        return sectorId;
-    }
 
-    public void setSectorId(Long sectorId) {
-        this.sectorId = sectorId;
-    }
 }

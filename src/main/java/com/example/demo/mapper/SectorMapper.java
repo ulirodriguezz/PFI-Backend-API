@@ -23,7 +23,6 @@ public class SectorMapper {
         dto.setId(sector.getId());
         dto.setDescription(sector.getDescription());
         dto.setName(sector.getName());
-        dto.setSectorId(sector.getId());
         return dto;
     }
 
@@ -44,4 +43,12 @@ public class SectorMapper {
         }
         return dtos;
     }
+
+    public void mergeChanges(Sector sectorInDB, SimpleSectorDTO updatedSectorData) {
+        if(updatedSectorData.getDescription() != null)
+            sectorInDB.setDescription(updatedSectorData.getDescription());
+        if(updatedSectorData.getName() != null)
+            sectorInDB.setName(updatedSectorData.getName());
+    }
+
 }
