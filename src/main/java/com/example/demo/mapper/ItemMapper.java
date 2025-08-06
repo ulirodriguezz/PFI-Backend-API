@@ -1,5 +1,6 @@
 package com.example.demo.mapper;
 
+import com.example.demo.dto.FullItemDTO;
 import com.example.demo.dto.ItemPreviewDTO;
 import com.example.demo.dto.SimpleItemDTO;
 import com.example.demo.model.Item;
@@ -30,6 +31,19 @@ public class ItemMapper {
                 .build();
         if(item.getContainer() != null)
             dto.setContainerId(item.getContainer().getId());
+        return dto;
+    }
+
+    public FullItemDTO toFullItemDTO(Item item,boolean isFavorite){
+        FullItemDTO dto = new FullItemDTO();
+        dto.setId(item.getId());
+        dto.setName(item.getName());
+        dto.setDescription(item.getDescription());
+        dto.setLocationDescription(item.getLocationDescription());
+        dto.setTagId(item.getTagId());
+        if(item.getContainer() != null)
+            dto.setContainerId(item.getContainer().getId());
+        dto.setFavorite(isFavorite);
         return dto;
     }
 

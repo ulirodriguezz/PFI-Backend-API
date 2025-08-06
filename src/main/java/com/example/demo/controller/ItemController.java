@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import com.example.demo.config.JwtProvider;
+import com.example.demo.dto.FullItemDTO;
 import com.example.demo.dto.Message;
 import com.example.demo.dto.SimpleItemDTO;
 import com.example.demo.mapper.ItemMapper;
@@ -19,10 +21,13 @@ public class ItemController {
     private final ItemMapper itemMapper;
     private final MovementService movementService;
 
-    public ItemController(ItemService itemService, ItemMapper itemMapper, MovementService movementService) {
+    private  final JwtProvider jwtProvider;
+
+    public ItemController(ItemService itemService, ItemMapper itemMapper, MovementService movementService, JwtProvider jwtProvider) {
         this.itemService = itemService;
         this.itemMapper = itemMapper;
         this.movementService = movementService;
+        this.jwtProvider = jwtProvider;
     }
 
     @PostMapping("/items")
@@ -31,10 +36,11 @@ public class ItemController {
         return ResponseEntity.status(HttpStatus.OK).body(storedItem);
     }
     @GetMapping("/items/{itemId}")
-    public ResponseEntity<SimpleItemDTO> getItemById(@PathVariable long itemId){
-        Item storedItem = itemService.getItemById(itemId);
-        SimpleItemDTO itemData = itemMapper.toSimpleItemDTO(storedItem);
-        return ResponseEntity.status(HttpStatus.OK).body(itemData);
+    public ResponseEntity<FullItemDTO> getItemById(@RequestHeader("Authorization") String authHeader,@PathVariable long itemId){
+        String token = jwtProvider.getTokenFromHeader(authHeader);
+        String loggedUsername = jwtProvider.getUsernameFromToken(token);
+        FullItemDTO result = itemService.getItemById(loggedUsername,itemId);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
     @GetMapping("items/search")
     public ResponseEntity<List<SimpleItemDTO>> filterItems(

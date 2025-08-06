@@ -12,7 +12,6 @@ import java.util.Set;
 public class UserController {
 
     private final UserService userService;
-
     private final JwtProvider jwtProvider;
 
     public UserController (UserService userService, JwtProvider jwtProvider) {

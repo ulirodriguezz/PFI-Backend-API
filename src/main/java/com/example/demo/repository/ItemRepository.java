@@ -22,4 +22,7 @@ public interface ItemRepository extends JpaRepository<Item,Long> {
     @Modifying
     @Query("UPDATE Item i SET i.container = null WHERE i.container.id = :containerId")
     public void clearContainerReferenceFromItems(@Param("containerId") long containerId);
+
+    @Query("SELECT COUNT(i) > 0 FROM User u JOIN u.favoriteItems i WHERE u.username = :username AND i.id = :itemId")
+    boolean isItemFavorite(@Param("username") String username, @Param("itemId") Long itemId);
 }

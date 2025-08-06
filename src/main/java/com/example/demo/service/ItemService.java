@@ -1,31 +1,39 @@
 package com.example.demo.service;
+import com.example.demo.dto.FullItemDTO;
 import com.example.demo.dto.SimpleItemDTO;
 import com.example.demo.mapper.ItemMapper;
 import com.example.demo.model.Container;
 import com.example.demo.model.Item;
 import com.example.demo.repository.ContainerRepository;
 import com.example.demo.repository.ItemRepository;
+import com.example.demo.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ItemService {
     private ItemRepository itemRepository;
     private ContainerRepository containerRepository;
+
+    private UserRepository userRepository;
     private ItemMapper itemMapper;
 
     private MovementService movementService;
     public ItemService(ItemRepository itemRepository,
                        ItemMapper itemMapper,
                        ContainerRepository containerRepository,
-                       MovementService movementService){
+                       MovementService movementService,
+                       UserRepository userRepository){
         this.itemRepository = itemRepository;
         this.itemMapper = itemMapper;
         this.containerRepository = containerRepository;
         this.movementService = movementService;
+        this.userRepository = userRepository;
+
     }
     @Transactional
     public SimpleItemDTO saveItem(SimpleItemDTO itemDto){
@@ -44,10 +52,13 @@ public class ItemService {
         return itemMapper.toSimpleItemDTO(savedItem);
     }
 
-    public Item getItemById(long id){
+    public FullItemDTO getItemById(String username, long id){
         Item item = itemRepository.getItemById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Item no encontrado"));
-        return item;
+
+        boolean isUserFavoriteItem = itemRepository.isItemFavorite(username,id);
+
+        return itemMapper.toFullItemDTO(item,isUserFavoriteItem);
     }
     public Item getItemByName(String name){
         Item item = itemRepository.getItemByName(name)
