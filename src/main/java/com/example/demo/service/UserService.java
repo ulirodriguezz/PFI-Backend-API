@@ -65,7 +65,7 @@ public class UserService {
 
     }
 
-    public Set<SimpleItemDTO> getUserFavoriteItems(long userId){
+    public Set<SimpleItemDTO> getUserFavoriteItems(String userId){
         Set<Item> itemList = userRepository.getUserFavoriteItems(userId);
         return new HashSet<>(itemMapper.toSimpleItemDtoList(new ArrayList<>(itemList)));
     }
@@ -81,10 +81,10 @@ public class UserService {
         return password.contentEquals(dbPassword);
     }
     @Transactional
-    public void addItemToFavorites(long userId, ItemFavoritePostDTO itemData) {
+    public void addItemToFavorites(String loggedUsername, ItemFavoritePostDTO itemData) {
         Item item = itemRepository.getItemById(itemData.getItemId())
                 .orElseThrow(() -> new EntityNotFoundException("No se encontró el item"));
-        User user = userRepository.getUserById(userId)
+        User user = userRepository.findUserByUsername(loggedUsername)
                 .orElseThrow(() -> new EntityNotFoundException("No se encontró el usuario"));
         user.getFavoriteItems().add(item);
         userRepository.save(user);

@@ -20,14 +20,18 @@ public class UserController {
         this.jwtProvider = jwtProvider;
     }
 
-    @GetMapping("/users/{userId}/favorites")
-    public ResponseEntity<Set<SimpleItemDTO>>getAllFavoriteItems(@PathVariable long userId){
-        Set<SimpleItemDTO> itemList = userService.getUserFavoriteItems(userId);
+    @GetMapping("/user/favorites")
+    public ResponseEntity<Set<SimpleItemDTO>>getAllFavoriteItems(@RequestHeader("Authorization") String authToken, @PathVariable long userId){
+        String token = jwtProvider.getTokenFromHeader(authToken);
+        String loggedUsername = jwtProvider.getUsernameFromToken(token);
+        Set<SimpleItemDTO> itemList = userService.getUserFavoriteItems(loggedUsername);
         return ResponseEntity.ok(itemList);
     }
-    @PostMapping("/users/{userId}/favorites")
-    public ResponseEntity<Message>addItemToFavorites(@PathVariable long userId, @RequestBody ItemFavoritePostDTO itemData){
-        userService.addItemToFavorites(userId,itemData);
+    @PostMapping("/user/favorites")
+    public ResponseEntity<Message>addItemToFavorites(@RequestHeader("Authorization") String authToken, @RequestBody ItemFavoritePostDTO itemData){
+        String token = jwtProvider.getTokenFromHeader(authToken);
+        String loggedUsername = jwtProvider.getUsernameFromToken(token);
+        userService.addItemToFavorites(loggedUsername,itemData);
         return ResponseEntity.ok(new Message("Se agregó el item a favoritos"));
     }
     @DeleteMapping ("/user/favorites/{itemId}")
