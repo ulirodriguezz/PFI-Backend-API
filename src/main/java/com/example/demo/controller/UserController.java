@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @GetMapping("/user/favorites")
-    public ResponseEntity<Set<SimpleItemDTO>>getAllFavoriteItems(@RequestHeader("Authorization") String authToken, @PathVariable long userId){
+    public ResponseEntity<Set<SimpleItemDTO>>getAllFavoriteItems(@RequestHeader("Authorization") String authToken){
         String token = jwtProvider.getTokenFromHeader(authToken);
         String loggedUsername = jwtProvider.getUsernameFromToken(token);
         Set<SimpleItemDTO> itemList = userService.getUserFavoriteItems(loggedUsername);
