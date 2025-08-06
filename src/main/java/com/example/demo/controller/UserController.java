@@ -40,7 +40,7 @@ public class UserController {
         userService.removeItemFromFavorites(loggedUsername,itemId);
         return ResponseEntity.ok(new Message("Se elimino el item de favoritos"));
     }
-    @GetMapping("/users/profile")
+    @GetMapping("/user/profile")
     public ResponseEntity<UserProfileDTO> getLoggedUserProfile(@RequestHeader("Authorization") String authHeader){
         String token = jwtProvider.getTokenFromHeader(authHeader);
         String loggedUserName = jwtProvider.getUsernameFromToken(token);
