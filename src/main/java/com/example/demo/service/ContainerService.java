@@ -1,11 +1,13 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.FullContainerDTO;
+import com.example.demo.dto.ImageDTO;
 import com.example.demo.dto.SimpleContainerDTO;
 import com.example.demo.dto.SimpleSectorDTO;
 import com.example.demo.mapper.ContainerMapper;
 import com.example.demo.mapper.ItemMapper;
 import com.example.demo.model.Container;
+import com.example.demo.model.Image;
 import com.example.demo.model.Item;
 import com.example.demo.model.Sector;
 import com.example.demo.repository.ContainerRepository;
@@ -14,6 +16,7 @@ import com.example.demo.repository.SectorRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,18 +24,18 @@ import java.util.List;
 public class ContainerService {
     private ContainerRepository containerRepository;
     private ContainerMapper containerMapper;
-
     private ItemMapper itemMapper;
     private ItemRepository itemRepository;
-
     private SectorRepository sectorRepository;
+    private ImageService imageService;
 
-    public ContainerService(ContainerRepository containerRepository, ContainerMapper containerMapper, ItemRepository itemRepository, ItemMapper itemMapper, SectorRepository sectorRepository){
+    public ContainerService(ContainerRepository containerRepository, ContainerMapper containerMapper, ItemRepository itemRepository, ItemMapper itemMapper, SectorRepository sectorRepository, ImageService imageService){
         this.containerRepository = containerRepository;
         this.containerMapper = containerMapper;
         this.itemRepository = itemRepository;
         this.itemMapper = itemMapper;
         this.sectorRepository = sectorRepository;
+        this.imageService = imageService;
     }
     public List<Container> getAllContainers(){
         List<Container> results = containerRepository.findAll();
@@ -96,5 +99,23 @@ public class ContainerService {
                 .orElseThrow(() -> new EntityNotFoundException("Sector Not Found"));
         container.setSector(destinationSector);
     }
+
+    @Transactional
+    public ImageDTO addImageToContainer(long containerId, MultipartFile imageMPF){
+        Container container = containerRepository.getContainerById(containerId)
+                .orElseThrow(() -> new EntityNotFoundException("Container Not Found"));
+
+        Image image = new Image();
+        image.setContainer(container);
+        return imageService.addImageToContainer(imageMPF,containerId,"container-images");
+    }
+    @Transactional
+    public void deleteImageFromContainer(long imageId,long containerId){
+        imageService.deleteImageFromContainer(imageId,containerId);
+    }
+    public List<ImageDTO> getAllImagesFromContainer(long itemId){
+        return imageService.getAllImagesByContainerId(itemId);
+    }
+
 
 }

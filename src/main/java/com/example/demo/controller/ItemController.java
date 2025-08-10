@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.config.JwtProvider;
 import com.example.demo.dto.FullItemDTO;
+import com.example.demo.dto.ImageDTO;
 import com.example.demo.dto.Message;
 import com.example.demo.dto.SimpleItemDTO;
 import com.example.demo.mapper.ItemMapper;
@@ -11,6 +12,7 @@ import com.example.demo.service.MovementService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,7 +22,6 @@ public class ItemController {
     private final ItemService itemService;
     private final ItemMapper itemMapper;
     private final MovementService movementService;
-
     private  final JwtProvider jwtProvider;
 
     public ItemController(ItemService itemService, ItemMapper itemMapper, MovementService movementService, JwtProvider jwtProvider) {
@@ -63,6 +64,26 @@ public class ItemController {
     public ResponseEntity<Message> deleteItem(@PathVariable long itemId){
         itemService.deleteItem(itemId);
         return ResponseEntity.status(HttpStatus.OK).body(new Message("Item eliminado"));
+    }
+
+    @PostMapping("/items/{itemId}/images")
+    public ResponseEntity<ImageDTO> uploadImageToItem(@RequestParam MultipartFile imageFile, @PathVariable long itemId)
+    {
+        ImageDTO createdImage = itemService.addImageToItem(itemId,imageFile);
+        return ResponseEntity.ok(createdImage);
+
+    }
+    @GetMapping("/items/{itemId}/images")
+    public ResponseEntity<List<ImageDTO>> getAllImagesFromItem(@PathVariable long itemId)
+    {
+        List<ImageDTO> results = itemService.getAllImagesFromItem(itemId);
+        return ResponseEntity.ok(results);
+    }
+
+    @DeleteMapping("/items/{itemId}/images/{imageId}")
+    public ResponseEntity<Message> deleteImageFromItem(@PathVariable long itemId, @PathVariable long imageId){
+        itemService.deleteImageFromItem(imageId,itemId);
+        return ResponseEntity.ok(new Message("Imagen Eliminada Con Exito"));
     }
 
 

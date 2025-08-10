@@ -1,9 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.FullContainerDTO;
-import com.example.demo.dto.Message;
-import com.example.demo.dto.SimpleContainerDTO;
-import com.example.demo.dto.SimpleItemDTO;
+import com.example.demo.dto.*;
 import com.example.demo.mapper.ContainerMapper;
 import com.example.demo.model.Container;
 import com.example.demo.service.ContainerService;
@@ -11,6 +8,7 @@ import com.example.demo.service.ItemService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -74,4 +72,25 @@ public class ContainerController {
         containerService.deleteById(containerId);
         return ResponseEntity.ok(new Message("Container Eliminado"));
     }
+
+    @PostMapping("/containers/{containerId}/images")
+    public ResponseEntity<ImageDTO> uploadImageToItem(@RequestParam MultipartFile imageFile, @PathVariable long containerId)
+    {
+        ImageDTO createdImage = containerService.addImageToContainer(containerId,imageFile);
+        return ResponseEntity.ok(createdImage);
+
+    }
+    @GetMapping("/containers/{containerId}/images")
+    public ResponseEntity<List<ImageDTO>> getAllImagesFromItem(@PathVariable long containerId)
+    {
+        List<ImageDTO> results = containerService.getAllImagesFromContainer(containerId);
+        return ResponseEntity.ok(results);
+    }
+
+    @DeleteMapping("/containers/{containerId}/images/{imageId}")
+    public ResponseEntity<Message> deleteImageFromItem(@PathVariable long containerId, @PathVariable long imageId){
+        containerService.deleteImageFromContainer(imageId,containerId);
+        return ResponseEntity.ok(new Message("Imagen Eliminada Con Exito"));
+    }
+
 }

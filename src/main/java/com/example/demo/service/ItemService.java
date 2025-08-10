@@ -1,8 +1,10 @@
 package com.example.demo.service;
 import com.example.demo.dto.FullItemDTO;
+import com.example.demo.dto.ImageDTO;
 import com.example.demo.dto.SimpleItemDTO;
 import com.example.demo.mapper.ItemMapper;
 import com.example.demo.model.Container;
+import com.example.demo.model.Image;
 import com.example.demo.model.Item;
 import com.example.demo.repository.ContainerRepository;
 import com.example.demo.repository.ItemRepository;
@@ -10,6 +12,7 @@ import com.example.demo.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Set;
@@ -23,16 +26,24 @@ public class ItemService {
     private ItemMapper itemMapper;
 
     private MovementService movementService;
+
+    private ImageService imageService;
     public ItemService(ItemRepository itemRepository,
                        ItemMapper itemMapper,
                        ContainerRepository containerRepository,
                        MovementService movementService,
-                       UserRepository userRepository){
+                       UserRepository userRepository,
+                       ImageService imageService
+                       ){
+
+
+
         this.itemRepository = itemRepository;
         this.itemMapper = itemMapper;
         this.containerRepository = containerRepository;
         this.movementService = movementService;
         this.userRepository = userRepository;
+        this.imageService = imageService;
 
     }
     @Transactional
@@ -89,4 +100,23 @@ public class ItemService {
         List<Item> result = itemRepository.getItemByContainerId(containerId);
         return itemMapper.toSimpleItemDtoList(result);
     }
+
+    @Transactional
+    public ImageDTO addImageToItem(long itemId, MultipartFile imageMPF){
+        Item item = itemRepository.getItemById(itemId)
+                .orElseThrow(()->new EntityNotFoundException("Item Not Found"));
+
+        Image image = new Image();
+        image.setItem(item);
+        return imageService.saveImage(imageMPF,"item-images",image);
+    }
+    @Transactional
+    public void deleteImageFromItem(long imageId,long itemId){
+        imageService.deleteImageFromItem(imageId,itemId);
+    }
+
+    public List<ImageDTO> getAllImagesFromItem(long itemId){
+        return imageService.getAllImagesByItemId(itemId);
+    }
+
 }

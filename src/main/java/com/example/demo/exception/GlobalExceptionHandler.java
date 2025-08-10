@@ -21,6 +21,11 @@ public class GlobalExceptionHandler {
 
     }
     @ExceptionHandler
+    public ResponseEntity<ErrorMessage> handleUsernameNotFound(FileException e){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorMessage("Error In File Conversion"));
+
+    }
+    @ExceptionHandler
     public ResponseEntity<ErrorMessage> hanldeNotFound(EntityNotFoundException e){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorMessage(e.getMessage()));
     }
