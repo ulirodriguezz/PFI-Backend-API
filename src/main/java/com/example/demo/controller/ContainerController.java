@@ -63,9 +63,8 @@ public class ContainerController {
     @PatchMapping("/containers/{containerId}")
     public ResponseEntity<SimpleContainerDTO> updateContainer(@RequestBody SimpleContainerDTO changedData,
                                                               @PathVariable long containerId){
-        Container updatedContainer = containerService.updateContainer(containerId,changedData);
-        SimpleContainerDTO updatedContainerData = containerMapper.toSimpleDTO(updatedContainer);
-        return ResponseEntity.ok(updatedContainerData);
+        SimpleContainerDTO updatedContainer = containerService.updateContainer(containerId,changedData);
+        return ResponseEntity.ok(updatedContainer);
     }
     @DeleteMapping("/containers/{containerId}")
     public ResponseEntity<Message> deleteContainer(@PathVariable long containerId){

@@ -55,26 +55,20 @@ public class ContainerService {
         dto.setItems(itemMapper.toItemPreviewList(containerItems));
         return dto;
     }
-    public List<Container> getContainersByName(String name){
-        List<Container> mathingResults = containerRepository.getAllByNameContainingIgnoreCase(name);
-        if(mathingResults.isEmpty())
-            throw new EntityNotFoundException("No se encontraron contenedores");
-        return mathingResults;
-    }
     @Transactional
     public SimpleContainerDTO save (SimpleContainerDTO newContainerData){
         Container newContainer = containerMapper.toContainerEntity(newContainerData);
         return containerMapper.toSimpleDTO(containerRepository.save(newContainer));
     }
     @Transactional
-    public Container updateContainer(long id, SimpleContainerDTO changedData){
+    public SimpleContainerDTO updateContainer(long id, SimpleContainerDTO changedData){
         Container oldContainer = containerRepository.getContainerById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No se encontró el contenedor"));
         containerMapper.mergeChanges(oldContainer,changedData);
         if(changedData.getSectorId() != null)
             this.changeContainerSector(oldContainer,changedData.getSectorId());
-
-        return containerRepository.save(oldContainer);
+        Container updatedContainer = containerRepository.save(oldContainer);
+        return containerMapper.toSimpleDTO(updatedContainer);
     }
     @Transactional
     public void deleteById(long id){

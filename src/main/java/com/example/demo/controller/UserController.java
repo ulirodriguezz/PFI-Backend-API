@@ -49,4 +49,13 @@ public class UserController {
 
         return ResponseEntity.ok(user);
     }
+    @PatchMapping("/user/profile")
+    public ResponseEntity<UserProfileDTO> updateProfile(@RequestHeader("Authorization") String authHeader,@RequestBody UserProfileDTO updateData){
+        String token = jwtProvider.getTokenFromHeader(authHeader);
+        String loggedUserName = jwtProvider.getUsernameFromToken(token);
+
+        UserProfileDTO user = userService.patchUser(loggedUserName,updateData);
+
+        return ResponseEntity.ok(user);
+    }
 }

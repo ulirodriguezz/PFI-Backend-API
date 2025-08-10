@@ -35,4 +35,16 @@ public class UserMapper {
         dto.setEmail(user.getEmail());
         return dto;
     }
+
+    public void mergeUpdates(UserProfileDTO updateData, User storedUser){
+        if(updateData.getEmail() != null)
+            storedUser.setEmail(updateData.getEmail());
+        if(updateData.getName() != null)
+            storedUser.setName(updateData.getName());
+        if(updateData.getSurname() != null)
+            storedUser.setSurname(updateData.getSurname());
+        if(updateData.getUsername() != null)
+            storedUser.setUsername(updateData.getUsername());
+    }
+
 }

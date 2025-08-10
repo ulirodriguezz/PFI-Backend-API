@@ -100,4 +100,14 @@ public class UserService {
     }
 
 
+    public UserProfileDTO patchUser(String loggedUserName, UserProfileDTO updateData) {
+        User dbUser = userRepository.findUserByUsername(loggedUserName)
+                .orElseThrow(() -> new EntityNotFoundException("User Not Found"));
+
+        userMapper.mergeUpdates(updateData,dbUser);
+
+        User updatedStoredUser =  userRepository.save(dbUser);
+
+        return userMapper.toUserProfileDTO(updatedStoredUser);
+    }
 }
