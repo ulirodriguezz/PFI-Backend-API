@@ -55,6 +55,9 @@ public class ContainerService {
         dto.setItems(itemMapper.toItemPreviewList(containerItems));
         return dto;
     }
+    public List<SimpleContainerDTO> getFilteredCotnainers(String query){
+        return null;
+    }
     @Transactional
     public SimpleContainerDTO save (SimpleContainerDTO newContainerData){
         Container newContainer = containerMapper.toContainerEntity(newContainerData);

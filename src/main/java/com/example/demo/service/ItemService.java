@@ -77,10 +77,10 @@ public class ItemService {
         return item;
     }
 
-    public List<Item> filterItems(String name) {
-        List<Item> results = itemRepository.searchAllByNameLike(name);
+    public List<Item> filterItems(String query) {
+        List<Item> results = itemRepository.searchAllByNameLike(query);
         if(results.isEmpty())
-            throw new EntityNotFoundException("No se encontraron items");
+            throw new EntityNotFoundException("No se encontraron items para la busqueda: "+query);
         return results;
     }
     @Transactional
