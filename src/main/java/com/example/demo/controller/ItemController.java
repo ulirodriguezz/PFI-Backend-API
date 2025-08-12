@@ -45,10 +45,9 @@ public class ItemController {
     }
     @GetMapping("items/search")
     public ResponseEntity<List<SimpleItemDTO>> filterItems(
-            @RequestParam(required = false,defaultValue = "") String name,
-            @RequestParam(required = false,defaultValue = "") String description
+            @RequestParam(required = false,defaultValue = "") String query
     ){
-        List<Item> matchingItems = itemService.filterItems(name,description);
+        List<Item> matchingItems = itemService.filterItems(query);
         List<SimpleItemDTO> resultData = itemMapper.toSimpleItemDtoList(matchingItems);
         return ResponseEntity.status(HttpStatus.OK).body(resultData);
     }
