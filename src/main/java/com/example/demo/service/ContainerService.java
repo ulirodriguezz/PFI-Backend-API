@@ -55,8 +55,11 @@ public class ContainerService {
         dto.setItems(itemMapper.toItemPreviewList(containerItems));
         return dto;
     }
-    public List<SimpleContainerDTO> getFilteredCotnainers(String query){
-        return null;
+    public List<SimpleContainerDTO> getFilteredContainers(String query){
+        List<Container> results = containerRepository.findAllByNameContainsOrDescriptionContaining(query,query);
+        if(results.isEmpty())
+            throw new EntityNotFoundException("No se ecnonctraron containers para la busqueda: "+query );
+        return containerMapper.toSimpleDTOList(results);
     }
     @Transactional
     public SimpleContainerDTO save (SimpleContainerDTO newContainerData){

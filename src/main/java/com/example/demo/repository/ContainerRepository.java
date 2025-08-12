@@ -21,6 +21,6 @@ public interface ContainerRepository extends JpaRepository<Container,Long> {
     @Modifying
     @Query("UPDATE Container c SET c.sector.id = null WHERE c.sector.id = :sectorId")
     void clearSectorReferenceFromContainer(@Param("sectorId") long sectorId);
-
+    List<Container> findAllByNameContainsOrDescriptionContaining(String name, String description);
     List<Container> getAllBySector(Sector sector);
 }

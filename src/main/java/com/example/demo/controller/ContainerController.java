@@ -37,10 +37,10 @@ public class ContainerController {
     }
     @GetMapping("/containers/search")
     public ResponseEntity<List<SimpleContainerDTO>> getContainersByQuery(
-            @RequestParam(required = false) String query
+            @RequestParam(required = false, defaultValue = "") String query
     ){
-        List<Container> resultData = this.containerService.getAllContainers();
-        return ResponseEntity.ok(containerMapper.toSimpleDTOList(resultData));
+        List<SimpleContainerDTO> resultData = containerService.getFilteredContainers(query);
+        return ResponseEntity.ok(resultData);
     }
 
     @GetMapping("/containers/{containerId}/items")
