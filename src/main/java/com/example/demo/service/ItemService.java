@@ -77,8 +77,8 @@ public class ItemService {
         return item;
     }
 
-    public List<Item> filterItems(String name, String description) {
-        List<Item> results = itemRepository.searchAllByQ(name,description);
+    public List<Item> filterItems(String name) {
+        List<Item> results = itemRepository.searchAllByNameLike(name);
         if(results.isEmpty())
             throw new EntityNotFoundException("No se encontraron items");
         return results;

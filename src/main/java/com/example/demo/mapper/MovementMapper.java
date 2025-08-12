@@ -21,8 +21,8 @@ public class MovementMapper {
     public MovementDTO toDTO (Movement movement){
         MovementDTO dto = new MovementDTO();
         dto.setId(movement.getId());
-        dto.setContainerId(movement.getDestinationContainer().getId());
-        dto.setItemId(movement.getItem().getId());
+        dto.setContainerReaderId(movement.getDestinationContainer().getReaderId());
+        dto.setTagId(movement.getItem().getTagId());
         dto.setTimestamp(movement.getTimestamp());
         return dto;
     }

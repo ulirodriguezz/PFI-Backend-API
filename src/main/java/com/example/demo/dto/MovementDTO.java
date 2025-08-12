@@ -6,15 +6,11 @@ import java.time.LocalDateTime;
 public class MovementDTO {
 
     private long id;
-    private long itemId;
-    private long containerId;
+    private String tagId;
+    private String containerReaderId;
     private Instant timestamp;
 
     public MovementDTO() {
-    }
-
-    public long getItemId() {
-        return itemId;
     }
 
     public long getId() {
@@ -25,16 +21,20 @@ public class MovementDTO {
         this.id = id;
     }
 
-    public void setItemId(long itemId) {
-        this.itemId = itemId;
+    public String getTagId() {
+        return tagId;
     }
 
-    public long getContainerId() {
-        return containerId;
+    public void setTagId(String tagId) {
+        this.tagId = tagId;
     }
 
-    public void setContainerId(long containerId) {
-        this.containerId = containerId;
+    public String getContainerReaderId() {
+        return containerReaderId;
+    }
+
+    public void setContainerReaderId(String containerReaderId) {
+        this.containerReaderId = containerReaderId;
     }
 
     public Instant getTimestamp() {

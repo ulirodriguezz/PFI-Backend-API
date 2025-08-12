@@ -15,6 +15,7 @@ import java.util.Set;
 @Repository
 public interface ContainerRepository extends JpaRepository<Container,Long> {
     Optional<Container> getContainerById(long id);
+    Optional<Container> getContainerByReaderId(String readerId);
     List<Container> getAllByNameContainingIgnoreCase(String name);
     void deleteById(long id);
     @Modifying

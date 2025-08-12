@@ -37,10 +37,10 @@ public class MovementService {
         return movementMapper.toMovementDtoList(movements);
     }
     @Transactional
-    public MovementDTO registerNewMovement(long itemId, MovementDTO movementData) {
-        Item item = itemRepository.getItemById(itemId)
-                .orElseThrow(() -> new EntityNotFoundException("No se encontró el item"));
-        Container destinationContainer = containerRepository.getContainerById(movementData.getContainerId())
+    public MovementDTO registerNewMovement(MovementDTO movementData) {
+        Item item = itemRepository.getByTagId(movementData.getTagId())
+                .orElseThrow(() -> new EntityNotFoundException("Item Not Found"));
+        Container destinationContainer = containerRepository.getContainerByReaderId(movementData.getContainerReaderId())
                 .orElseThrow(() -> new EntityNotFoundException("No se encontró el container"));
         item.setContainer(destinationContainer);
         Movement newMovement = movementMapper.toEntity(movementData, destinationContainer, item);

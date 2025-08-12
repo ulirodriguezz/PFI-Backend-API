@@ -24,9 +24,9 @@ public class MovementController {
         return ResponseEntity.ok(results);
     }
 
-    @PostMapping("/items/{itemId}/movements")
-    public ResponseEntity<MovementDTO> registerMovement(@PathVariable long itemId, @RequestBody MovementDTO movementData){
-        MovementDTO registeredMovement = movementService.registerNewMovement(itemId,movementData);
+    @PostMapping("/items/movements")
+    public ResponseEntity<MovementDTO> registerMovement(@RequestBody MovementDTO movementData){
+        MovementDTO registeredMovement = movementService.registerNewMovement(movementData);
         return ResponseEntity.ok(registeredMovement);
     }
 
