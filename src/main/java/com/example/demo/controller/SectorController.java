@@ -10,9 +10,7 @@ import java.util.List;
 
 @RestController
 public class SectorController {
-
     private final SectorService sectorService;
-
     private final ContainerService containerService;
 
     public SectorController(SectorService sectorService,ContainerService containerService) {
@@ -23,6 +21,13 @@ public class SectorController {
     @GetMapping("/sectors")
     public ResponseEntity<List<SimpleSectorDTO>> getAllSectors(){
         List<SimpleSectorDTO> resultList = sectorService.getAllSectors();
+        return ResponseEntity.ok(resultList);
+    }
+    @GetMapping("/sectors/search")
+    public ResponseEntity<List<SimpleSectorDTO>> getFilteredSectors(
+            @RequestParam(required = false,defaultValue = "") String query
+    ){
+        List<SimpleSectorDTO> resultList = sectorService.getAllSectorsByQuery(query);
         return ResponseEntity.ok(resultList);
     }
     @PostMapping("/sectors")

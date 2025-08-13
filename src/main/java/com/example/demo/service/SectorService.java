@@ -34,6 +34,13 @@ public class SectorService {
         List<Sector> sectorsList = sectorRepository.findAll();
         return sectorMapper.toSimpleSectorDtoList(sectorsList);
     }
+
+    public List<SimpleSectorDTO> getAllSectorsByQuery(String query){
+        List<Sector> results = sectorRepository.findAllByNameContainsOrDescriptionContaining(query,query);
+        if(results.isEmpty())
+            throw new EntityNotFoundException("No se encontraron sectores para la busqueda: "+query);
+        return sectorMapper.toSimpleSectorDtoList(results);
+    }
     @Transactional
     public FullSectorDTO getSectorById(long sectorId){
         Sector sector = sectorRepository.getSectorById(sectorId)

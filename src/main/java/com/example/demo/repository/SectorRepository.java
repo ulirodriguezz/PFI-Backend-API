@@ -12,4 +12,6 @@ public interface SectorRepository extends JpaRepository<Sector,Long> {
 
     Optional<Sector> getSectorById(long sectorId);
 
+    List<Sector> findAllByNameContainsOrDescriptionContaining(String name, String descriptio);
+
 }
