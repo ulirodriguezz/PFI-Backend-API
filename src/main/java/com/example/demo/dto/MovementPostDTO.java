@@ -1,16 +1,15 @@
 package com.example.demo.dto;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
-public class MovementDTO {
+public class MovementPostDTO {
 
     private long id;
     private String tagId;
     private String containerReaderId;
     private Instant timestamp;
 
-    public MovementDTO() {
+    public MovementPostDTO() {
     }
 
     public long getId() {

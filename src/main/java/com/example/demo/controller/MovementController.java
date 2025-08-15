@@ -1,7 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.Message;
-import com.example.demo.dto.MovementDTO;
+import com.example.demo.dto.MovementGetDTO;
+import com.example.demo.dto.MovementPostDTO;
 import com.example.demo.service.ItemService;
 import com.example.demo.service.MovementService;
 import org.springframework.http.ResponseEntity;
@@ -18,19 +19,19 @@ public class MovementController {
         this.movementService = movementService;
     }
 
-    @GetMapping("/items/{itemId}/movements")
-    public ResponseEntity<List<MovementDTO>> getAllMovementsFromItem(@PathVariable long itemId){
-        List<MovementDTO> results = movementService.getAllMovementsByItemId(itemId);
+    @GetMapping("/movements/items/{itemId}")
+    public ResponseEntity<List<MovementGetDTO>> getAllMovementsFromItem(@PathVariable long itemId){
+        List<MovementGetDTO> results = movementService.getAllMovementsByItemId(itemId);
         return ResponseEntity.ok(results);
     }
 
-    @PostMapping("/items/movements")
-    public ResponseEntity<MovementDTO> registerMovement(@RequestBody MovementDTO movementData){
-        MovementDTO registeredMovement = movementService.registerNewMovement(movementData);
+    @PostMapping("/movements")
+    public ResponseEntity<MovementPostDTO> registerMovement(@RequestBody MovementPostDTO movementData){
+        MovementPostDTO registeredMovement = movementService.registerNewMovement(movementData);
         return ResponseEntity.ok(registeredMovement);
     }
 
-    @DeleteMapping("/items/movements/{movementId}")
+    @DeleteMapping("/movements/{movementId}")
     public ResponseEntity<Message> deleteMovementByID(@PathVariable long movementId){
         movementService.deleteMovementById(movementId);
         return ResponseEntity.ok(new Message("Movimiento eliminado del historial"));

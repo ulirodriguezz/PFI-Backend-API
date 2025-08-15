@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.MovementDTO;
+import com.example.demo.dto.MovementGetDTO;
+import com.example.demo.dto.MovementPostDTO;
 import com.example.demo.mapper.MovementMapper;
 import com.example.demo.model.Container;
 import com.example.demo.model.Item;
@@ -32,21 +33,31 @@ public class MovementService {
         this.containerRepository = containerRepository;
     }
 
-    public List<MovementDTO> getAllMovementsByItemId(long itemId){
+    public List<MovementGetDTO> getAllMovementsByItemId(long itemId){
         List<Movement> movements = movementRepository.getAllByItemIdOrderByTimestampDesc(itemId);
-        return movementMapper.toMovementDtoList(movements);
+        return movementMapper.toMovementGetDTOList(movements);
     }
+
+    /**
+     * Registers an item being stored in a destination container
+     * @param movementData DTO containing the item's associated NFC tag id and the container's reader id
+     * @return a MovementDTO with all the relevant information of the movement
+     */
     @Transactional
-    public MovementDTO registerNewMovement(MovementDTO movementData) {
+    public MovementPostDTO registerNewMovement(MovementPostDTO movementData) {
         Item item = itemRepository.getByTagId(movementData.getTagId())
                 .orElseThrow(() -> new EntityNotFoundException("Item Not Found"));
         Container destinationContainer = containerRepository.getContainerByReaderId(movementData.getContainerReaderId())
                 .orElseThrow(() -> new EntityNotFoundException("No se encontró el container"));
+
         item.setContainer(destinationContainer);
+
         Movement newMovement = movementMapper.toEntity(movementData, destinationContainer, item);
         Movement storedMovement = movementRepository.save(newMovement);
+
         itemRepository.save(item);
-        return movementMapper.toDTO(storedMovement);
+
+        return movementMapper.toMovementPostDTO(storedMovement);
     }
     @Transactional
     public void deleteMovementById(long movementId){
