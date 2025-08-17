@@ -34,7 +34,7 @@ public class FirebaseConfig {
             ServiceAccountCredentials credentials = ServiceAccountCredentials.fromPkcs8(
                     firebaseProperties.getClientId(),
                     firebaseProperties.getClientEmail(),
-                    firebaseProperties.getPrivateKey().replace("\\n", "\n"),
+                    firebaseProperties.getPrivateKey(),
                     firebaseProperties.getPrivateKeyId(),
                     Collections.singleton("https://www.googleapis.com/auth/cloud-platform")
             ).toBuilder().setProjectId(firebaseProperties.getPid()).build();
