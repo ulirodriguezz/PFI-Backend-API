@@ -101,22 +101,22 @@ public class ItemService {
         return itemMapper.toSimpleItemDtoList(result);
     }
 
-    @Transactional
-    public ImageDTO addImageToItem(long itemId, MultipartFile imageMPF){
-        Item item = itemRepository.getItemById(itemId)
-                .orElseThrow(()->new EntityNotFoundException("Item Not Found"));
-
-        Image image = new Image();
-        image.setItem(item);
-        return imageService.saveImage(imageMPF,"item-images",image);
-    }
-    @Transactional
-    public void deleteImageFromItem(long imageId,long itemId){
-        imageService.deleteImageFromItem(imageId,itemId);
-    }
-
-    public List<ImageDTO> getAllImagesFromItem(long itemId){
-        return imageService.getAllImagesByItemId(itemId);
-    }
+//    @Transactional
+//    public ImageDTO addImageToItem(long itemId, MultipartFile imageMPF){
+//        Item item = itemRepository.getItemById(itemId)
+//                .orElseThrow(()->new EntityNotFoundException("Item Not Found"));
+//
+//        Image image = new Image();
+//        image.setItem(item);
+//        return imageService.saveImage(imageMPF,"item-images",image);
+//    }
+//    @Transactional
+//    public void deleteImageFromItem(long imageId,long itemId){
+//        imageService.deleteImageFromItem(imageId,itemId);
+//    }
+//
+//    public List<ImageDTO> getAllImagesFromItem(long itemId){
+//        return imageService.getAllImagesByItemId(itemId);
+//    }
 
 }
