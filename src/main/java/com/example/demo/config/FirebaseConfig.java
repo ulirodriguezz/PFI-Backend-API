@@ -28,34 +28,34 @@ public class FirebaseConfig {
         this.firebaseProperties = firebaseProperties;
     }
 
-//    @PostConstruct
-//    public void init() {
-//        try {
-//            ServiceAccountCredentials credentials = ServiceAccountCredentials.fromPkcs8(
-//                    firebaseProperties.getClientId(),
-//                    firebaseProperties.getClientEmail(),
-//                    firebaseProperties.getPrivateKey().replace("\\n", "\n"),
-//                    firebaseProperties.getPrivateKeyId(),
-//                    Collections.singleton("https://www.googleapis.com/auth/cloud-platform")
-//            ).toBuilder().setProjectId(firebaseProperties.getPid()).build();
-//
-//
-//            FirebaseOptions options = FirebaseOptions.builder()
-//                    .setCredentials(credentials)
-//                    .setStorageBucket(firebaseProperties.getName())
-//                    .build();
-//
-//            FirebaseApp.initializeApp(options);
-//        } catch (Exception e) {
-//            throw new RuntimeException("Error al inicializar Firebase", e);
-//        }
-//    }
-//
-//    @Bean
-//    public Bucket firebaseBucket() {
-//        // Usa el bucket por defecto que pusiste en FirebaseOptions.setStorageBucket(...)
-//        return StorageClient.getInstance().bucket();
-//        // Si querés forzar el nombre: return StorageClient.getInstance().bucket(firebaseProperties.getName());
-//    }
+    @PostConstruct
+    public void init() {
+        try {
+            ServiceAccountCredentials credentials = ServiceAccountCredentials.fromPkcs8(
+                    firebaseProperties.getClientId(),
+                    firebaseProperties.getClientEmail(),
+                    firebaseProperties.getPrivateKey().replace("\\n", "\n"),
+                    firebaseProperties.getPrivateKeyId(),
+                    Collections.singleton("https://www.googleapis.com/auth/cloud-platform")
+            ).toBuilder().setProjectId(firebaseProperties.getPid()).build();
+
+
+            FirebaseOptions options = FirebaseOptions.builder()
+                    .setCredentials(credentials)
+                    .setStorageBucket(firebaseProperties.getName())
+                    .build();
+
+            FirebaseApp.initializeApp(options);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al inicializar Firebase", e);
+        }
+    }
+
+    @Bean
+    public Bucket firebaseBucket() {
+        // Usa el bucket por defecto que pusiste en FirebaseOptions.setStorageBucket(...)
+        return StorageClient.getInstance().bucket();
+        // Si querés forzar el nombre: return StorageClient.getInstance().bucket(firebaseProperties.getName());
+    }
 
 }

@@ -100,22 +100,22 @@ public class ContainerService {
         container.setSector(destinationSector);
     }
 
-//    @Transactional
-//    public ImageDTO addImageToContainer(long containerId, MultipartFile imageMPF){
-//        Container container = containerRepository.getContainerById(containerId)
-//                .orElseThrow(() -> new EntityNotFoundException("Container Not Found"));
-//
-//        Image image = new Image();
-//        image.setContainer(container);
-//        return imageService.addImageToContainer(imageMPF,containerId,"container-images");
-//    }
-//    @Transactional
-//    public void deleteImageFromContainer(long imageId,long containerId){
-//        imageService.deleteImageFromContainer(imageId,containerId);
-//    }
-//    public List<ImageDTO> getAllImagesFromContainer(long itemId){
-//        return imageService.getAllImagesByContainerId(itemId);
-//    }
+    @Transactional
+    public ImageDTO addImageToContainer(long containerId, MultipartFile imageMPF){
+        Container container = containerRepository.getContainerById(containerId)
+                .orElseThrow(() -> new EntityNotFoundException("Container Not Found"));
+
+        Image image = new Image();
+        image.setContainer(container);
+        return imageService.addImageToContainer(imageMPF,containerId,"container-images");
+    }
+    @Transactional
+    public void deleteImageFromContainer(long imageId,long containerId){
+        imageService.deleteImageFromContainer(imageId,containerId);
+    }
+    public List<ImageDTO> getAllImagesFromContainer(long itemId){
+        return imageService.getAllImagesByContainerId(itemId);
+    }
 
 
 }

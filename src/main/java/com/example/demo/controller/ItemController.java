@@ -58,6 +58,11 @@ public class ItemController {
         SimpleItemDTO updatedItemData = itemMapper.toSimpleItemDTO(updatedItem);
         return ResponseEntity.status(HttpStatus.OK).body(updatedItemData);
     }
+    @PatchMapping("/items/{itemId}/tag")
+    public ResponseEntity<SimpleItemDTO> asingRfidTagToItem(@PathVariable long itemId, @RequestBody SimpleItemDTO tagData){
+        SimpleItemDTO updatedItem = itemService.assignRfidTagToItem(itemId,tagData.getTagId());
+        return ResponseEntity.ok(updatedItem);
+    }
 
     @DeleteMapping("/items/{itemId}")
     public ResponseEntity<Message> deleteItem(@PathVariable long itemId){
@@ -65,25 +70,25 @@ public class ItemController {
         return ResponseEntity.status(HttpStatus.OK).body(new Message("Item eliminado"));
     }
 
-//    @PostMapping("/items/{itemId}/images")
-//    public ResponseEntity<ImageDTO> uploadImageToItem(@RequestParam MultipartFile imageFile, @PathVariable long itemId)
-//    {
-//        ImageDTO createdImage = itemService.addImageToItem(itemId,imageFile);
-//        return ResponseEntity.ok(createdImage);
-//
-//    }
-//    @GetMapping("/items/{itemId}/images")
-//    public ResponseEntity<List<ImageDTO>> getAllImagesFromItem(@PathVariable long itemId)
-//    {
-//        List<ImageDTO> results = itemService.getAllImagesFromItem(itemId);
-//        return ResponseEntity.ok(results);
-//    }
-//
-//    @DeleteMapping("/items/{itemId}/images/{imageId}")
-//    public ResponseEntity<Message> deleteImageFromItem(@PathVariable long itemId, @PathVariable long imageId){
-//        itemService.deleteImageFromItem(imageId,itemId);
-//        return ResponseEntity.ok(new Message("Imagen Eliminada Con Exito"));
-//    }
+    @PostMapping("/items/{itemId}/images")
+    public ResponseEntity<ImageDTO> uploadImageToItem(@RequestParam MultipartFile imageFile, @PathVariable long itemId)
+    {
+        ImageDTO createdImage = itemService.addImageToItem(itemId,imageFile);
+        return ResponseEntity.ok(createdImage);
+
+    }
+    @GetMapping("/items/{itemId}/images")
+    public ResponseEntity<List<ImageDTO>> getAllImagesFromItem(@PathVariable long itemId)
+    {
+        List<ImageDTO> results = itemService.getAllImagesFromItem(itemId);
+        return ResponseEntity.ok(results);
+    }
+
+    @DeleteMapping("/items/{itemId}/images/{imageId}")
+    public ResponseEntity<Message> deleteImageFromItem(@PathVariable long itemId, @PathVariable long imageId){
+        itemService.deleteImageFromItem(imageId,itemId);
+        return ResponseEntity.ok(new Message("Imagen Eliminada Con Exito"));
+    }
 
 
 }
