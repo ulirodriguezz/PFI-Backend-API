@@ -65,5 +65,9 @@ public class AuthController {
         loggedUser.setToken(token);
         return ResponseEntity.ok(loggedUser);
     }
+    @GetMapping("/health")
+    public ResponseEntity<String> health() {
+        return ResponseEntity.ok("Up and running");
+    }
 
 }

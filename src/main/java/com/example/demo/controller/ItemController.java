@@ -58,6 +58,11 @@ public class ItemController {
         SimpleItemDTO updatedItemData = itemMapper.toSimpleItemDTO(updatedItem);
         return ResponseEntity.status(HttpStatus.OK).body(updatedItemData);
     }
+    @PatchMapping("/items/{itemId}/tag")
+    public ResponseEntity<SimpleItemDTO> asingRfidTagToItem(@PathVariable long itemId, @RequestBody SimpleItemDTO tagData){
+        SimpleItemDTO updatedItem = itemService.assignRfidTagToItem(itemId,tagData.getTagId());
+        return ResponseEntity.ok(updatedItem);
+    }
 
     @DeleteMapping("/items/{itemId}")
     public ResponseEntity<Message> deleteItem(@PathVariable long itemId){

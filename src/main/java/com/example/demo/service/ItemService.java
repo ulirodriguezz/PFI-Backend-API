@@ -11,6 +11,7 @@ import com.example.demo.repository.ItemRepository;
 import com.example.demo.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -119,4 +120,20 @@ public class ItemService {
         return imageService.getAllImagesByItemId(itemId);
     }
 
+    @Transactional
+    public SimpleItemDTO assignRfidTagToItem(long itemId, String tagId) {
+        Item item = itemRepository.getItemById(itemId)
+                .orElseThrow(()->new EntityNotFoundException("User Not Found"));
+        Item itemWithTagAlreadyAssigned = itemRepository.getByTagId(tagId)
+                .orElse(null);
+        //If the tagId was already assigned to another item, set it to null
+        //and assign it to the newest item
+        if(itemWithTagAlreadyAssigned != null){
+            itemWithTagAlreadyAssigned.setTagId(null);
+            itemRepository.save(itemWithTagAlreadyAssigned);
+        }
+        item.setTagId(tagId);
+        Item updatedItem = itemRepository.save(item);
+        return itemMapper.toSimpleItemDTO(updatedItem);
+    }
 }

@@ -1,11 +1,9 @@
 package com.example.demo.config;
 
 import com.example.demo.types.UserRoleType;
-import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -53,7 +51,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration corsConfif = new CorsConfiguration();
-        corsConfif.setAllowedOrigins(List.of("http://192.168.1.4:8081","http://localhost:8081","**"));
+        corsConfif.setAllowedOriginPatterns(List.of("*"));
         corsConfif.setAllowedMethods(List.of("GET","POST","PUT","DELETE","PATCH","OPTIONS"));
         corsConfif.setAllowedHeaders(List.of("Authorization","Content-type"));
         corsConfif.setAllowCredentials(true);
