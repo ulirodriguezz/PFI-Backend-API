@@ -25,6 +25,7 @@ public class ContainerMapper {
         dto.setDescription(container.getDescription());
         if(container.getSector() != null)
             dto.setSectorId(container.getSector().getId());
+        dto.setReaderId(container.getReaderId());
         return dto;
     }
     public FullContainerDTO toFullContainerDTO(Container container){
@@ -35,6 +36,7 @@ public class ContainerMapper {
         dto.setSectorInfo(sectorMapper.toSimpleSectorDTO(container.getSector()));
         if(container.getSector() != null)
             dto.setSectorId(container.getSector().getId());
+        dto.setReaderId(container.getReaderId());
         return dto;
     }
     public Container toContainerEntity(SimpleContainerDTO dto){
@@ -48,6 +50,8 @@ public class ContainerMapper {
             storedContainer.setDescription(changedData.getDescription());
         if(changedData.getName() != null)
             storedContainer.setName(changedData.getName());
+        if(changedData.getReaderId() != null)
+            storedContainer.setReaderId(changedData.getReaderId());
     }
     public List<SimpleContainerDTO> toSimpleDTOList(List<Container> containers){
         List<SimpleContainerDTO> dtos = new ArrayList<>();

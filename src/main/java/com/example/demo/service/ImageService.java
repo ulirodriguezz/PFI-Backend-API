@@ -10,6 +10,7 @@ import com.example.demo.repository.ContainerRepository;
 import com.example.demo.repository.ImageRepository;
 import com.example.demo.repository.ItemRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -110,4 +111,8 @@ public class ImageService {
         imageRepository.delete(image);
     }
 
+
+    public void deleteAllReferencesToItem(long itemId) {
+        imageRepository.deleteAllReferencesToItem(itemId);
+    }
 }

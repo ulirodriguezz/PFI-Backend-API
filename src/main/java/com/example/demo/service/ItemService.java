@@ -86,6 +86,7 @@ public class ItemService {
     }
     @Transactional
     public void deleteItem(long itemId) {
+        imageService.deleteAllReferencesToItem(itemId);
         itemRepository.deleteById(itemId);
     }
 

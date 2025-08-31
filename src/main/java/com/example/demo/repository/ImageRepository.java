@@ -4,6 +4,9 @@ import com.example.demo.model.Container;
 import com.example.demo.model.Image;
 import com.example.demo.model.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,4 +18,7 @@ public interface ImageRepository extends JpaRepository<Image,Long> {
 
     List<Image> getAllByContainerIdOrderByCreatedAtAsc(long ItemId);
 
+    @Modifying
+    @Query("UPDATE Image i SET i.item = NULL WHERE i.item.id = :itemId")
+    void deleteAllReferencesToItem(@Param("itemId") long itemId);
 }
