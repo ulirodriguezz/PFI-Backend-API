@@ -21,13 +21,11 @@ public class ItemController {
 
     private final ItemService itemService;
     private final ItemMapper itemMapper;
-    private final MovementService movementService;
     private  final JwtProvider jwtProvider;
 
-    public ItemController(ItemService itemService, ItemMapper itemMapper, MovementService movementService, JwtProvider jwtProvider) {
+    public ItemController(ItemService itemService, ItemMapper itemMapper, JwtProvider jwtProvider) {
         this.itemService = itemService;
         this.itemMapper = itemMapper;
-        this.movementService = movementService;
         this.jwtProvider = jwtProvider;
     }
 

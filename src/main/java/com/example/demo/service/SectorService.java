@@ -6,6 +6,7 @@ import com.example.demo.dto.SimpleSectorDTO;
 import com.example.demo.mapper.ContainerMapper;
 import com.example.demo.mapper.SectorMapper;
 import com.example.demo.model.Sector;
+import com.example.demo.model.Tenant;
 import com.example.demo.repository.ContainerRepository;
 import com.example.demo.repository.SectorRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -16,12 +17,10 @@ import java.util.List;
 
 @Service
 public class SectorService {
-    private SectorRepository sectorRepository;
-    private SectorMapper sectorMapper;
-    private ContainerRepository containerRepository;
-    private ContainerMapper containerMapper;
-
-    private ContainerService containerService;
+    private final SectorRepository sectorRepository;
+    private final SectorMapper sectorMapper;
+    private final ContainerRepository containerRepository;
+    private final ContainerMapper containerMapper;
 
     public SectorService(SectorRepository sectorRepository, ContainerRepository containerRepository, SectorMapper sectorMapper, ContainerMapper containerMapper) {
         this.sectorRepository = sectorRepository;
@@ -31,7 +30,8 @@ public class SectorService {
     }
 
     public List<SimpleSectorDTO> getAllSectors(){
-        List<Sector> sectorsList = sectorRepository.findAll();
+        //TenantRepository getTenantById()
+        List<Sector> sectorsList = sectorRepository.findSectorsByTenantId(1);
         return sectorMapper.toSimpleSectorDtoList(sectorsList);
     }
 
@@ -51,7 +51,12 @@ public class SectorService {
     }
     @Transactional
     public SimpleSectorDTO createSector(SimpleSectorDTO sectorData){
+        Tenant tenant = new Tenant();
+        tenant.setId(1);
+        tenant.setName("UADE");
+
         Sector newSector = sectorMapper.toSectorEntity(sectorData);
+        newSector.setTenant(tenant);
         Sector storedSector = sectorRepository.save(newSector);
         return sectorMapper.toSimpleSectorDTO(storedSector);
     }

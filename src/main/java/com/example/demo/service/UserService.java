@@ -5,6 +5,7 @@ import com.example.demo.dto.*;
 import com.example.demo.mapper.ItemMapper;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.Item;
+import com.example.demo.model.Tenant;
 import com.example.demo.model.User;
 import com.example.demo.repository.ItemRepository;
 import com.example.demo.repository.UserRepository;
@@ -21,19 +22,16 @@ import java.util.Set;
 @Service
 public class UserService {
 
-    private UserRepository userRepository;
-    private ItemRepository itemRepository;
-    private PasswordEncoder passwordEncoder;
-    private ItemService itemService;
-    private ItemMapper itemMapper;
+    private final UserRepository userRepository;
+    private final ItemRepository itemRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final ItemMapper itemMapper;
+    private final UserMapper userMapper;
 
-    private UserMapper userMapper;
-
-    public UserService(UserRepository userRepository, ItemRepository itemRepository, PasswordEncoder passwordEncoder, ItemService itemService, ItemMapper itemMapper, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, ItemRepository itemRepository, PasswordEncoder passwordEncoder, ItemMapper itemMapper, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.itemRepository = itemRepository;
         this.passwordEncoder = passwordEncoder;
-        this.itemService = itemService;
         this.itemMapper = itemMapper;
         this.userMapper = userMapper;
     }
@@ -72,8 +70,14 @@ public class UserService {
 
     @Transactional
     public User registerUser(User user) {
+        Tenant tenant = new Tenant();
+        tenant.setId(1);
+        tenant.setName("UADE");
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setTenant(tenant);
         User registeredUser = userRepository.save(user);
+
         return registeredUser;
     }
 

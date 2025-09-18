@@ -27,6 +27,7 @@ public class JwtProvider {
                 .collect(Collectors.toList());
 
         claims.put("roles", roles);
+        claims.put("tenantId",1);
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -53,6 +54,15 @@ public class JwtProvider {
                 .getBody()
                 .getSubject();
         return  username;
+    }
+
+    public String getTenantFromToken(String token){
+        String tenantId =  Jwts.parserBuilder()
+                .setSigningKey(jwtSecret)
+                .build()
+                .parseClaimsJws(token)
+                .getBody().get("tenantId",String.class);
+        return  tenantId;
     }
 
     public boolean validateToken(String token){

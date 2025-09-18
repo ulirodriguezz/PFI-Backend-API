@@ -20,6 +20,9 @@ public class Container {
     @ManyToOne
     @JoinColumn(name = "sector_id")
     private Sector sector;
+    @ManyToOne
+    @JoinColumn(name = "tenant_id")
+    private Tenant tenant;
 
 
     public Container() {
@@ -63,5 +66,13 @@ public class Container {
 
     public void setReaderId(String readerId) {
         this.readerId = readerId;
+    }
+
+    public Tenant getTenant() {
+        return tenant;
+    }
+
+    public void setTenant(Tenant tenant) {
+        this.tenant = tenant;
     }
 }
