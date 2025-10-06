@@ -78,6 +78,12 @@ public class ImageService {
             throw new EntityNotFoundException("Image Not Found");
         deleteImage(image);
     }
+    public void deleteAllImagesByContainerId(long containerId){
+        this.imageRepository.deleteAllByContainerId(containerId);
+    }
+    public void deleteAllImagesByItemId(long itemId){
+        this.imageRepository.deleteAllByItemId(itemId);
+    }
 
     public List<ImageDTO> getAllImagesByItemId(long itemId){
         List<Image> imageList = imageRepository.getAllByItemIdOrderByCreatedAtAsc(itemId);

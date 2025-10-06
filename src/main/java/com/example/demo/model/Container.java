@@ -14,7 +14,6 @@ public class Container {
     private String name;
     @Column(name = "description",nullable = false)
     private String description;
-    //Falta la foto del contenedor
     @Column(name = "reader_id")
     private String readerId;
     @ManyToOne

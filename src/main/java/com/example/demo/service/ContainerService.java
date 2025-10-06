@@ -80,6 +80,7 @@ public class ContainerService {
     @Transactional
     public void deleteById(long id){
         itemRepository.clearContainerReferenceFromItems(id);
+        imageService.deleteAllImagesByContainerId(id);
         containerRepository.deleteById(id);
     }
 

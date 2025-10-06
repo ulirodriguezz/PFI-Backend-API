@@ -20,15 +20,15 @@ import java.util.Set;
 
 @Service
 public class ItemService {
-    private ItemRepository itemRepository;
-    private ContainerRepository containerRepository;
+    private final ItemRepository itemRepository;
+    private final ContainerRepository containerRepository;
 
-    private UserRepository userRepository;
-    private ItemMapper itemMapper;
+    private final UserRepository userRepository;
+    private final ItemMapper itemMapper;
 
-    private MovementService movementService;
+    private final MovementService movementService;
 
-    private ImageService imageService;
+    private final ImageService imageService;
     public ItemService(ItemRepository itemRepository,
                        ItemMapper itemMapper,
                        ContainerRepository containerRepository,
@@ -86,7 +86,10 @@ public class ItemService {
     }
     @Transactional
     public void deleteItem(long itemId) {
+        movementService.deleteAllMovementsByItemId(itemId);
+        imageService.deleteAllImagesByItemId(itemId);
         itemRepository.deleteById(itemId);
+
     }
 
     @Transactional
