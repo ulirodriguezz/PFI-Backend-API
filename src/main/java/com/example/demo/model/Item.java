@@ -25,6 +25,11 @@ public class Item {
     @JoinColumn(name = "container_id",nullable = true)
     private Container container;
 
+    @ManyToOne
+    @JoinColumn(name = "tenant_id")
+    private Tenant tenant;
+
+
     public Item() {
     }
 
@@ -74,5 +79,13 @@ public class Item {
 
     public void setContainer(Container container) {
         this.container = container;
+    }
+
+    public Tenant getTenant() {
+        return tenant;
+    }
+
+    public void setTenant(Tenant tenant) {
+        this.tenant = tenant;
     }
 }

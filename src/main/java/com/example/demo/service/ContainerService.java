@@ -22,12 +22,12 @@ import java.util.List;
 
 @Service
 public class ContainerService {
-    private ContainerRepository containerRepository;
-    private ContainerMapper containerMapper;
-    private ItemMapper itemMapper;
-    private ItemRepository itemRepository;
-    private SectorRepository sectorRepository;
-    private ImageService imageService;
+    private final ContainerRepository containerRepository;
+    private final ContainerMapper containerMapper;
+    private final ItemMapper itemMapper;
+    private final ItemRepository itemRepository;
+    private final SectorRepository sectorRepository;
+    private final ImageService imageService;
 
     private ReaderService readerService;
 
@@ -42,7 +42,8 @@ public class ContainerService {
     }
 
     public List<Container> getAllContainers(){
-        List<Container> results = containerRepository.findAll();
+        //TenantService getTenantById()
+        List<Container> results = containerRepository.findContainersByTenantId(1);
         if(results.isEmpty())
             throw new EntityNotFoundException("No hay contenedores");
         return results;
@@ -91,6 +92,7 @@ public class ContainerService {
     @Transactional
     public void deleteById(long id){
         itemRepository.clearContainerReferenceFromItems(id);
+        imageService.deleteAllImagesByContainerId(id);
         containerRepository.deleteById(id);
     }
 

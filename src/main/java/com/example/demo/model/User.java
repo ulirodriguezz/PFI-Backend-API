@@ -22,6 +22,7 @@ public class User {
     private String email;
     @Enumerated(EnumType.STRING)
     private UserRoleType role;
+
     @ManyToMany
     @JoinTable(
             name = "user_favorite_items",
@@ -29,6 +30,11 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "item_id")
     )
     private Set<Item> favoriteItems;
+
+    @ManyToOne
+    @JoinColumn(name = "tenant_id")
+    private Tenant tenant;
+
     @PrePersist
     public void OnCreate(){
         this.favoriteItems = new HashSet<>();
@@ -100,6 +106,14 @@ public class User {
 
     public void setRole(UserRoleType role) {
         this.role = role;
+    }
+
+    public Tenant getTenant() {
+        return tenant;
+    }
+
+    public void setTenant(Tenant tenant) {
+        this.tenant = tenant;
     }
 
     @Override

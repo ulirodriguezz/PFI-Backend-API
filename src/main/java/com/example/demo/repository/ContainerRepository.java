@@ -1,7 +1,9 @@
 package com.example.demo.repository;
 
 import com.example.demo.model.Container;
+import com.example.demo.model.Item;
 import com.example.demo.model.Sector;
+import com.example.demo.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -23,6 +25,8 @@ public interface ContainerRepository extends JpaRepository<Container,Long> {
     void clearSectorReferenceFromContainer(@Param("sectorId") long sectorId);
     List<Container> findAllByNameContainsOrDescriptionContaining(String name, String description);
     List<Container> getAllBySector(Sector sector);
+    @Query("FROM Container c WHERE c.tenant.id = :tenantId ")
+    List<Container> findContainersByTenantId(@Param("tenantId") long tenantId);
     @Modifying
     @Query("UPDATE Container c SET c.readerId = null WHERE c.readerId = :readerId")
     void clearReaderReferenceFromContainers(@Param("readerId") String readerId);

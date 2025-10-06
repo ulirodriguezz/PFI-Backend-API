@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item,Long> {
@@ -27,4 +26,6 @@ public interface ItemRepository extends JpaRepository<Item,Long> {
     public void clearContainerReferenceFromItems(@Param("containerId") long containerId);
     @Query("SELECT COUNT(i) > 0 FROM User u JOIN u.favoriteItems i WHERE u.username = :username AND i.id = :itemId")
     boolean isItemFavorite(@Param("username") String username, @Param("itemId") Long itemId);
+    @Query("FROM Item i WHERE i.tenant.id = :tenantId ")
+    List<Item> findItemsByTenantId(@Param("tenantId") long tenantId);
 }

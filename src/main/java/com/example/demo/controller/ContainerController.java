@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.config.JwtProvider;
 import com.example.demo.dto.*;
 import com.example.demo.mapper.ContainerMapper;
 import com.example.demo.model.Container;
@@ -18,11 +19,13 @@ public class ContainerController {
     private final ContainerService containerService;
     private final ContainerMapper containerMapper;
     private final ItemService itemService;
+    private  final JwtProvider jwtProvider;
 
-    public ContainerController(ContainerService containerService, ContainerMapper containerMapper, ItemService itemService){
+    public ContainerController(ContainerService containerService, ContainerMapper containerMapper, ItemService itemService, JwtProvider jwtProvider){
         this.containerMapper = containerMapper;
         this.containerService = containerService;
         this.itemService = itemService;
+        this.jwtProvider = jwtProvider;
     }
     @GetMapping("/containers")
     ResponseEntity<List<SimpleContainerDTO>> getAllContainers(){

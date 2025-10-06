@@ -18,6 +18,12 @@ public interface ImageRepository extends JpaRepository<Image,Long> {
 
     List<Image> getAllByContainerIdOrderByCreatedAtAsc(long ItemId);
 
+    @Query("DELETE FROM Image i Where i.containerId = :containerId ")
+    void deleteAllByContainerId(@Param("containerId") long containerId);
+
+    @Query("DELETE FROM Item i Where i.containerId = :itemId ")
+    void deleteAllByItemId(@Param("itemId") long itemId);
+
     @Modifying
     @Query("UPDATE Image i SET i.item = NULL WHERE i.item.id = :itemId")
     void deleteAllReferencesToItem(@Param("itemId") long itemId);

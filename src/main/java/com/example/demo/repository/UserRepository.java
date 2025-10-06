@@ -22,5 +22,8 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Query("SELECT i.id FROM User u JOIN u.favoriteItems i WHERE u.id = :userId")
     Set<Long> getUserFavoriteItemsIds(@Param("username") String username);
 
+    @Query("FROM User u WHERE u.tenant.id = :tenantId ")
+    List<User> findUsersByTenantId(@Param("tenantId") long tenantId);
+
 
 }
