@@ -13,6 +13,7 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.io.InputStream;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -31,17 +32,13 @@ public class FirebaseConfig {
     @PostConstruct
     public void init() {
         try {
-            ServiceAccountCredentials credentials = ServiceAccountCredentials.fromPkcs8(
-                    firebaseProperties.getClientId(),
-                    firebaseProperties.getClientEmail(),
-                    firebaseProperties.getPrivateKey().replace("\\n", "\n"),
-                    firebaseProperties.getPrivateKeyId(),
-                    Collections.singleton("https://www.googleapis.com/auth/cloud-platform")
-            ).toBuilder().setProjectId(firebaseProperties.getPid()).build();
+            InputStream serviceAccount = getClass()
+                    .getClassLoader()
+                    .getResourceAsStream("firebase/pfi-bucket-vars.json");
 
 
             FirebaseOptions options = FirebaseOptions.builder()
-                    .setCredentials(credentials)
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .setStorageBucket(firebaseProperties.getName())
                     .build();
 

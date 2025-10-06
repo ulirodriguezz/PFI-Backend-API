@@ -88,6 +88,7 @@ public class ItemService {
     public void deleteItem(long itemId) {
         movementService.deleteAllMovementsByItemId(itemId);
         imageService.deleteAllImagesByItemId(itemId);
+        imageService.deleteAllReferencesToItem(itemId);
         itemRepository.deleteById(itemId);
 
     }

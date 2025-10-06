@@ -29,14 +29,18 @@ public class ContainerService {
     private final SectorRepository sectorRepository;
     private final ImageService imageService;
 
-    public ContainerService(ContainerRepository containerRepository, ContainerMapper containerMapper, ItemRepository itemRepository, ItemMapper itemMapper, SectorRepository sectorRepository, ImageService imageService){
+    private ReaderService readerService;
+
+    public ContainerService(ContainerRepository containerRepository, ContainerMapper containerMapper, ItemMapper itemMapper, ItemRepository itemRepository, SectorRepository sectorRepository, ImageService imageService, ReaderService readerService) {
         this.containerRepository = containerRepository;
         this.containerMapper = containerMapper;
-        this.itemRepository = itemRepository;
         this.itemMapper = itemMapper;
+        this.itemRepository = itemRepository;
         this.sectorRepository = sectorRepository;
         this.imageService = imageService;
+        this.readerService = readerService;
     }
+
     public List<Container> getAllContainers(){
         //TenantService getTenantById()
         List<Container> results = containerRepository.findContainersByTenantId(1);
@@ -71,9 +75,17 @@ public class ContainerService {
     public SimpleContainerDTO updateContainer(long id, SimpleContainerDTO changedData){
         Container oldContainer = containerRepository.getContainerById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No se encontró el contenedor"));
-        containerMapper.mergeChanges(oldContainer,changedData);
-        if(changedData.getSectorId() != null)
+
+
+        if(changedData.getSectorId() != null) {
             this.changeContainerSector(oldContainer,changedData.getSectorId());
+        }
+        if(changedData.getReaderId() != null){
+            readerService.setReaderAsUnavailable(changedData.getReaderId());
+            containerRepository.clearReaderReferenceFromContainers(changedData.getReaderId());
+        }
+        containerMapper.mergeChanges(oldContainer,changedData);
+
         Container updatedContainer = containerRepository.save(oldContainer);
         return containerMapper.toSimpleDTO(updatedContainer);
     }
