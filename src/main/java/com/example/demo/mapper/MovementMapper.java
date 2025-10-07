@@ -1,5 +1,6 @@
 package com.example.demo.mapper;
 
+import com.example.demo.dto.MovementAppPostDTO;
 import com.example.demo.dto.MovementGetDTO;
 import com.example.demo.dto.MovementPostDTO;
 import com.example.demo.model.Container;
@@ -18,11 +19,25 @@ public class MovementMapper {
         movement.setDestinationContainer(container);
         return movement;
     }
+    public Movement toEntity(MovementAppPostDTO dto, Container container, Item item){
+        Movement movement = new Movement();
+        movement.setItem(item);
+        movement.setDestinationContainer(container);
+        return movement;
+    }
 
     public MovementPostDTO toMovementPostDTO(Movement movement){
         MovementPostDTO dto = new MovementPostDTO();
         dto.setId(movement.getId());
         dto.setContainerReaderId(movement.getDestinationContainer().getReaderId());
+        dto.setTagId(movement.getItem().getTagId());
+        dto.setTimestamp(movement.getTimestamp());
+        return dto;
+    }
+    public MovementAppPostDTO toMovementAppPostDTO(Movement movement){
+        MovementAppPostDTO dto = new MovementAppPostDTO();
+        dto.setId(movement.getId());
+        dto.setContainerId(movement.getDestinationContainer().getId());
         dto.setTagId(movement.getItem().getTagId());
         dto.setTimestamp(movement.getTimestamp());
         return dto;

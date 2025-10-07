@@ -28,6 +28,7 @@ public class ItemMapper {
                 .description(item.getDescription())
                 .locationDescription(item.getLocationDescription())
                 .tagId(item.getTagId())
+                .usedBy(item.getInUseBy() != null? item.getInUseBy().getUsername():null)
                 .build();
         if(item.getContainer() != null)
             dto.setContainerId(item.getContainer().getId());
@@ -44,6 +45,7 @@ public class ItemMapper {
         if(item.getContainer() != null)
             dto.setContainerId(item.getContainer().getId());
         dto.setFavorite(isFavorite);
+        dto.setUsedBy(item.getInUseBy()!= null?item.getInUseBy().getUsername():null);
         return dto;
     }
 
@@ -79,5 +81,7 @@ public class ItemMapper {
             item.setTagId(dto.getTagId());
         if(dto.getLocationDescription() != null)
             item.setLocationDescription(dto.getLocationDescription());
+        if(dto.getUsedBy() == null)
+            item.setInUseBy(null);
     }
 }

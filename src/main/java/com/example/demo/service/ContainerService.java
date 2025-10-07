@@ -12,6 +12,7 @@ import com.example.demo.model.Item;
 import com.example.demo.model.Sector;
 import com.example.demo.repository.ContainerRepository;
 import com.example.demo.repository.ItemRepository;
+import com.example.demo.repository.MovementRepository;
 import com.example.demo.repository.SectorRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -30,8 +31,9 @@ public class ContainerService {
     private final ImageService imageService;
 
     private ReaderService readerService;
+    private final MovementRepository movementRepository;
 
-    public ContainerService(ContainerRepository containerRepository, ContainerMapper containerMapper, ItemMapper itemMapper, ItemRepository itemRepository, SectorRepository sectorRepository, ImageService imageService, ReaderService readerService) {
+    public ContainerService(ContainerRepository containerRepository, ContainerMapper containerMapper, ItemMapper itemMapper, ItemRepository itemRepository, SectorRepository sectorRepository, ImageService imageService, ReaderService readerService, MovementRepository movementRepository) {
         this.containerRepository = containerRepository;
         this.containerMapper = containerMapper;
         this.itemMapper = itemMapper;
@@ -39,20 +41,19 @@ public class ContainerService {
         this.sectorRepository = sectorRepository;
         this.imageService = imageService;
         this.readerService = readerService;
+        this.movementRepository = movementRepository;
     }
 
-    public List<Container> getAllContainers(){
+    public List<Container> getAllContainers() {
         //TenantService getTenantById()
         List<Container> results = containerRepository.findContainersByTenantId(1);
-        if(results.isEmpty())
-            throw new EntityNotFoundException("No hay contenedores");
+        if (results.isEmpty()) throw new EntityNotFoundException("No hay contenedores");
         return results;
     }
 
     @Transactional
-    public FullContainerDTO getContainerById(long id){
-        Container storedContainer = containerRepository.getContainerById(id)
-                .orElseThrow(() -> new EntityNotFoundException("No se encontró el contenedor"));
+    public FullContainerDTO getContainerById(long id) {
+        Container storedContainer = containerRepository.getContainerById(id).orElseThrow(() -> new EntityNotFoundException("No se encontró el contenedor"));
         FullContainerDTO dto = containerMapper.toFullContainerDTO(storedContainer);
 
         List<Item> containerItems = itemRepository.getItemByContainerId(storedContainer.getId());
@@ -60,37 +61,41 @@ public class ContainerService {
         dto.setItems(itemMapper.toItemPreviewList(containerItems));
         return dto;
     }
-    public List<SimpleContainerDTO> getFilteredContainers(String query){
-        List<Container> results = containerRepository.findAllByNameContainsOrDescriptionContaining(query,query);
-        if(results.isEmpty())
-            throw new EntityNotFoundException("No se ecnonctraron containers para la busqueda: "+query );
+
+    public List<SimpleContainerDTO> getFilteredContainers(String query) {
+        List<Container> results = containerRepository.findAllByNameContainsOrDescriptionContaining(query, query);
+        if (results.isEmpty())
+            throw new EntityNotFoundException("No se encontraron containers para la búsqueda: " + query);
         return containerMapper.toSimpleDTOList(results);
     }
+
     @Transactional
-    public SimpleContainerDTO save (SimpleContainerDTO newContainerData){
+    public SimpleContainerDTO save(SimpleContainerDTO newContainerData) {
         Container newContainer = containerMapper.toContainerEntity(newContainerData);
         return containerMapper.toSimpleDTO(containerRepository.save(newContainer));
     }
+
     @Transactional
-    public SimpleContainerDTO updateContainer(long id, SimpleContainerDTO changedData){
-        Container oldContainer = containerRepository.getContainerById(id)
-                .orElseThrow(() -> new EntityNotFoundException("No se encontró el contenedor"));
+    public SimpleContainerDTO updateContainer(long id, SimpleContainerDTO changedData) {
+        Container oldContainer = containerRepository.getContainerById(id).orElseThrow(() -> new EntityNotFoundException("No se encontró el contenedor"));
 
 
-        if(changedData.getSectorId() != null) {
-            this.changeContainerSector(oldContainer,changedData.getSectorId());
+        if (changedData.getSectorId() != null) {
+            this.changeContainerSector(oldContainer, changedData.getSectorId());
         }
-        if(changedData.getReaderId() != null){
+        if (changedData.getReaderId() != null) {
             readerService.setReaderAsUnavailable(changedData.getReaderId());
             containerRepository.clearReaderReferenceFromContainers(changedData.getReaderId());
         }
-        containerMapper.mergeChanges(oldContainer,changedData);
+        containerMapper.mergeChanges(oldContainer, changedData);
 
         Container updatedContainer = containerRepository.save(oldContainer);
         return containerMapper.toSimpleDTO(updatedContainer);
     }
+
     @Transactional
-    public void deleteById(long id){
+    public void deleteById(long id) {
+        movementRepository.removeAllReferencesToContainer(id);
         itemRepository.clearContainerReferenceFromItems(id);
         imageService.deleteAllImagesByContainerId(id);
         containerRepository.deleteById(id);
@@ -98,8 +103,7 @@ public class ContainerService {
 
     @Transactional
     public SimpleContainerDTO saveContainerInSector(long sectorId, SimpleContainerDTO containerData) {
-        Sector sector = sectorRepository.getSectorById(sectorId)
-                .orElseThrow(() -> new EntityNotFoundException("Sector Not Found"));
+        Sector sector = sectorRepository.getSectorById(sectorId).orElseThrow(() -> new EntityNotFoundException("Sector Not Found"));
         Container newContainer = containerMapper.toContainerEntity(containerData);
         newContainer.setSector(sector);
         Container storedContainer = containerRepository.save(newContainer);
@@ -108,26 +112,26 @@ public class ContainerService {
 
     }
 
-    private void changeContainerSector(Container container, Long sectorId){
-        Sector destinationSector = sectorRepository.getSectorById(sectorId)
-                .orElseThrow(() -> new EntityNotFoundException("Sector Not Found"));
+    private void changeContainerSector(Container container, Long sectorId) {
+        Sector destinationSector = sectorRepository.getSectorById(sectorId).orElseThrow(() -> new EntityNotFoundException("Sector Not Found"));
         container.setSector(destinationSector);
     }
 
     @Transactional
-    public ImageDTO addImageToContainer(long containerId, MultipartFile imageMPF){
-        Container container = containerRepository.getContainerById(containerId)
-                .orElseThrow(() -> new EntityNotFoundException("Container Not Found"));
+    public ImageDTO addImageToContainer(long containerId, MultipartFile imageMPF) {
+        Container container = containerRepository.getContainerById(containerId).orElseThrow(() -> new EntityNotFoundException("Container Not Found"));
 
         Image image = new Image();
         image.setContainer(container);
-        return imageService.addImageToContainer(imageMPF,containerId,"container-images");
+        return imageService.addImageToContainer(imageMPF, containerId, "container-images");
     }
+
     @Transactional
-    public void deleteImageFromContainer(long imageId,long containerId){
-        imageService.deleteImageFromContainer(imageId,containerId);
+    public void deleteImageFromContainer(long imageId, long containerId) {
+        imageService.deleteImageFromContainer(imageId, containerId);
     }
-    public List<ImageDTO> getAllImagesFromContainer(long itemId){
+
+    public List<ImageDTO> getAllImagesFromContainer(long itemId) {
         return imageService.getAllImagesByContainerId(itemId);
     }
 

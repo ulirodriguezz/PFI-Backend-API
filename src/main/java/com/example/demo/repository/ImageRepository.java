@@ -11,17 +11,20 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface ImageRepository extends JpaRepository<Image,Long> {
+public interface ImageRepository extends JpaRepository<Image, Long> {
 
     Optional<Image> getImageById(long id);
+
     List<Image> getAllByItemIdOrderByCreatedAtAsc(long itemId);
 
     List<Image> getAllByContainerIdOrderByCreatedAtAsc(long ItemId);
 
-    @Query("DELETE FROM Image i Where i.containerId = :containerId ")
+    @Modifying
+    @Query("DELETE FROM Image i Where i.container.id = :containerId ")
     void deleteAllByContainerId(@Param("containerId") long containerId);
 
-    @Query("DELETE FROM Item i Where i.containerId = :itemId ")
+    @Modifying
+    @Query("DELETE FROM Image i Where i.item.id = :itemId ")
     void deleteAllByItemId(@Param("itemId") long itemId);
 
     @Modifying

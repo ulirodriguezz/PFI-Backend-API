@@ -13,14 +13,18 @@ public class SimpleItemDTO {
 
     private Long containerId;
 
-    public SimpleItemDTO(Long id, String tagId, String name, String description, String locationDescription, Long containerId) {
+    private String usedBy;
+
+    public SimpleItemDTO(Long id, String tagId, String name, String description, String locationDescription, Long containerId, String usedBy) {
         this.id = id;
         this.tagId = tagId;
         this.name = name;
         this.description = description;
         this.locationDescription = locationDescription;
         this.containerId = containerId;
+        this.usedBy = usedBy;
     }
+
     public SimpleItemDTO(Builder builder){
         this.id = builder.id;
         this.tagId = builder.tagId;
@@ -28,6 +32,7 @@ public class SimpleItemDTO {
         this.description = builder.description;
         this.locationDescription = builder.locationDescription;
         this.containerId = builder.containerId;
+        this.usedBy = builder.usedBy;
     }
 
     public static class Builder{
@@ -37,6 +42,7 @@ public class SimpleItemDTO {
         private String description;
         private String locationDescription;
         private Long containerId;
+        private String usedBy;
         public Builder id(Long id){
             this.id = id;
             return this;
@@ -59,6 +65,10 @@ public class SimpleItemDTO {
         }
         public Builder containerId(Long containerId){
             this.containerId = containerId;
+            return this;
+        }
+        public Builder usedBy(String username){
+            this.usedBy = username;
             return this;
         }
         public SimpleItemDTO build(){
@@ -116,5 +126,13 @@ public class SimpleItemDTO {
 
     public void setContainerId(Long containerId) {
         this.containerId = containerId;
+    }
+
+    public String getUsedBy() {
+        return usedBy;
+    }
+
+    public void setUsedBy(String usedBy) {
+        this.usedBy = usedBy;
     }
 }

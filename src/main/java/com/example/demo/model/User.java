@@ -13,7 +13,6 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-//    Es buena práctica acompañar esto con una validación de negocio en el servicio (por ejemplo, tirar 409 Conflict si el nombre ya existe).
     @Column(unique = true)
     private String username;
     private String password;
@@ -36,7 +35,7 @@ public class User {
     private Tenant tenant;
 
     @PrePersist
-    public void OnCreate(){
+    public void OnCreate() {
         this.favoriteItems = new HashSet<>();
         this.role = UserRoleType.USER;
     }

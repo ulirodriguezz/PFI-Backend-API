@@ -28,7 +28,7 @@ public class ReaderController {
         //Should always be only one available reader
         List<RfidReader> availableReaders = readerService.getAllAvailableReaders();
         if(availableReaders.isEmpty())
-            throw new EntityNotFoundException("No avaialable readers found");
+            throw new EntityNotFoundException("No hay lectores disponibles");
         RfidReader availableReader = availableReaders.get(0);
         return ResponseEntity.ok(availableReader);
     }

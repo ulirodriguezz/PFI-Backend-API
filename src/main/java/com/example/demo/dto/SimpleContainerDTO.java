@@ -5,8 +5,9 @@ public class SimpleContainerDTO {
     private String name;
     private String description;
     private Long sectorId;
-
     private String readerId;
+
+
 
     public SimpleContainerDTO() {
     }
