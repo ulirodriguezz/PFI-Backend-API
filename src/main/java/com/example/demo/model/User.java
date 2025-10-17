@@ -21,6 +21,7 @@ public class User {
     private String email;
     @Enumerated(EnumType.STRING)
     private UserRoleType role;
+    private boolean isDisabled;
 
     @ManyToMany
     @JoinTable(
@@ -115,17 +116,23 @@ public class User {
         this.tenant = tenant;
     }
 
+    public boolean isDisabled() {
+        return isDisabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        isDisabled = disabled;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(password, user.password) &&
-                Objects.equals(name, user.name) && Objects.equals(surname, user.surname) && Objects.equals(email, user.email);
+        return isDisabled == user.isDisabled && Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(name, user.name) && Objects.equals(surname, user.surname) && Objects.equals(email, user.email) && role == user.role && Objects.equals(favoriteItems, user.favoriteItems) && Objects.equals(tenant, user.tenant);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, password, name, surname, email);
+        return Objects.hash(id, username, password, name, surname, email, role, isDisabled, favoriteItems, tenant);
     }
 }

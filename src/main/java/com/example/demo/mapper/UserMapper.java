@@ -5,6 +5,8 @@ import com.example.demo.dto.UserProfileDTO;
 import com.example.demo.model.User;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class UserMapper {
     public User toUserEntity(SimpleUserDTO dto){
@@ -24,6 +26,9 @@ public class UserMapper {
                 .id(user.getId())
                 .build();
         return dto;
+    }
+    public List<UserProfileDTO> toUserProfileDTOList(List<User> users){
+        return users.stream().map(this::toUserProfileDTO).toList();
     }
 
     public UserProfileDTO toUserProfileDTO (User user){

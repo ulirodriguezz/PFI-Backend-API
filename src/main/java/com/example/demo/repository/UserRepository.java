@@ -24,6 +24,8 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     @Query("FROM User u WHERE u.tenant.id = :tenantId ")
     List<User> findUsersByTenantId(@Param("tenantId") long tenantId);
+    @Query("FROM User u WHERE u.isDisabled = :isDiabled")
+    List<User> findAllByIsDisabled(@Param("isDisabled") boolean isDisabled);
 
 
 }

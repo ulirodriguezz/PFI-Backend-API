@@ -6,6 +6,7 @@ import com.example.demo.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -17,6 +18,17 @@ public class UserController {
     public UserController (UserService userService, JwtProvider jwtProvider) {
         this.userService = userService;
         this.jwtProvider = jwtProvider;
+    }
+    @GetMapping("/admin/users")
+    public ResponseEntity<List<UserProfileDTO>> getAllUsers(@RequestParam() boolean enabled){
+        if(!enabled)
+            return ResponseEntity.ok(this.userService.getAllDisabledUsers());
+        return ResponseEntity.ok(this.userService.getAllUsers());
+
+    }
+    @PatchMapping("/admin/users/{username}")
+    public ResponseEntity<UserProfileDTO> enableOrRejectUser(@RequestParam() boolean isRejected, @PathVariable String username){
+            return ResponseEntity.ok(this.userService.updateUserStatus(username,isRejected));
     }
 
     @GetMapping("/user/favorites")

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -38,6 +39,15 @@ public class UserService {
         this.tenantRepository = tenantRepository;
         this.itemMapper = itemMapper;
         this.userMapper = userMapper;
+    }
+
+    public List<UserProfileDTO> getAllUsers(){
+        List<User> storedUsers = this.userRepository.findAllByIsDisabled(false);
+        return userMapper.toUserProfileDTOList(storedUsers);
+    }
+    public List<UserProfileDTO> getAllDisabledUsers(){
+        List<User> storedUsers = this.userRepository.findAllByIsDisabled(true);
+        return userMapper.toUserProfileDTOList(storedUsers);
     }
 
     public User getUsernameByCredentials(UserCredentials credentials) {
@@ -71,6 +81,13 @@ public class UserService {
         Set<Item> itemList = userRepository.getUserFavoriteItems(userId);
         return new HashSet<>(itemMapper.toSimpleItemDtoList(new ArrayList<>(itemList)));
     }
+    @Transactional
+    public UserProfileDTO updateUserStatus(String username, boolean isDisabled){
+        User storedUser = userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("No se encontrò el usuario"));
+        storedUser.setDisabled(isDisabled);
+        return userMapper.toUserProfileDTO(userRepository.save(storedUser));
+    }
 
     @Transactional
     public User registerUser(User user) {
@@ -82,6 +99,7 @@ public class UserService {
                 });
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setTenant(tenant);
+        user.setDisabled(false);
 
         User registeredUser = userRepository.save(user);
 
