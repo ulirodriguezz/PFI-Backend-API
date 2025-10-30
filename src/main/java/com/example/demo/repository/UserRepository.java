@@ -15,6 +15,8 @@ import java.util.Set;
 public interface UserRepository extends JpaRepository<User,Long> {
     Optional<User> findUserByUsername(String username);
 
+    Optional<User> findUserByEmail(String email);
+
     Optional<User> getUserById(long id);
     @Query("SELECT u.favoriteItems FROM User u WHERE u.username = :username")
     Set<Item> getUserFavoriteItems(@Param("username") String username);
@@ -24,8 +26,9 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     @Query("FROM User u WHERE u.tenant.id = :tenantId ")
     List<User> findUsersByTenantId(@Param("tenantId") long tenantId);
-    @Query("FROM User u WHERE u.isDisabled = :isDiabled")
+    @Query("FROM User u WHERE u.isDisabled = :isDisabled")
     List<User> findAllByIsDisabled(@Param("isDisabled") boolean isDisabled);
+
 
 
 }

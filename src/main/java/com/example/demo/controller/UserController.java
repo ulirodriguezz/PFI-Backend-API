@@ -28,7 +28,7 @@ public class UserController {
     }
     @PatchMapping("/admin/users/{username}")
     public ResponseEntity<UserProfileDTO> enableOrRejectUser(@RequestParam() boolean isRejected, @PathVariable String username){
-            return ResponseEntity.ok(this.userService.updateUserStatus(username,isRejected));
+            return ResponseEntity.ok(this.userService.  updateUserStatus(username,isRejected));
     }
 
     @GetMapping("/user/favorites")
@@ -69,5 +69,9 @@ public class UserController {
         UserProfileDTO user = userService.patchUser(loggedUserName,updateData);
 
         return ResponseEntity.ok(user);
+    }
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<SimpleUserDTO> getUserById(@PathVariable long userId){
+        return ResponseEntity.ok(userService.getUserById(userId));
     }
 }

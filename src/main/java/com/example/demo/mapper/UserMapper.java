@@ -15,6 +15,7 @@ public class UserMapper {
         user.setName(dto.getName());
         user.setSurname(dto.getSurname());
         user.setPassword(dto.getPassword());
+        user.setEmail(dto.getEmail());
         return user;
     }
 
@@ -23,6 +24,7 @@ public class UserMapper {
                 .name(user.getName())
                 .surname(user.getSurname())
                 .username(user.getUsername())
+                .email(user.getEmail())
                 .id(user.getId())
                 .build();
         return dto;

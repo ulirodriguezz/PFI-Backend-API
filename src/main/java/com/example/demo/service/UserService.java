@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 
 import com.example.demo.dto.*;
+import com.example.demo.helpers.PasswordGenerator;
 import com.example.demo.mapper.ItemMapper;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.Item;
@@ -27,25 +28,28 @@ public class UserService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
     private final PasswordEncoder passwordEncoder;
-
     private final TenantRepository tenantRepository;
     private final ItemMapper itemMapper;
     private final UserMapper userMapper;
 
-    public UserService(UserRepository userRepository, ItemRepository itemRepository, PasswordEncoder passwordEncoder, TenantRepository tenantRepository, ItemMapper itemMapper, UserMapper userMapper) {
+    private final EmailService emailService;
+
+    public UserService(UserRepository userRepository, ItemRepository itemRepository, PasswordEncoder passwordEncoder, TenantRepository tenantRepository, ItemMapper itemMapper, UserMapper userMapper, EmailService emailService) {
         this.userRepository = userRepository;
         this.itemRepository = itemRepository;
         this.passwordEncoder = passwordEncoder;
         this.tenantRepository = tenantRepository;
         this.itemMapper = itemMapper;
         this.userMapper = userMapper;
+        this.emailService = emailService;
     }
 
-    public List<UserProfileDTO> getAllUsers(){
+    public List<UserProfileDTO> getAllUsers() {
         List<User> storedUsers = this.userRepository.findAllByIsDisabled(false);
         return userMapper.toUserProfileDTOList(storedUsers);
     }
-    public List<UserProfileDTO> getAllDisabledUsers(){
+
+    public List<UserProfileDTO> getAllDisabledUsers() {
         List<User> storedUsers = this.userRepository.findAllByIsDisabled(true);
         return userMapper.toUserProfileDTOList(storedUsers);
     }
@@ -81,12 +85,38 @@ public class UserService {
         Set<Item> itemList = userRepository.getUserFavoriteItems(userId);
         return new HashSet<>(itemMapper.toSimpleItemDtoList(new ArrayList<>(itemList)));
     }
+
     @Transactional
-    public UserProfileDTO updateUserStatus(String username, boolean isDisabled){
+    public UserProfileDTO updateUserStatus(String username, boolean isDisabled) {
         User storedUser = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException("No se encontrò el usuario"));
+
+        if (isDisabled) {
+            emailService.sendEmail(storedUser.getEmail(), "Registro de usuario FindIT",
+
+                    "Hola " + storedUser.getName() + ",\n \n" +
+                            "Tu solicitud de registro en FindIT fue rechazada por el administrador." + "\n \n" +
+                            "Para acceder a FindIT, tu solicitud de registro de usuario debe ser aceptada por el administrador" + "\n \n" +
+                            "Asegurate de hablar con el antes de intentar un nuevo registro" + "\n \n" +
+                            "Saludos cordiales," + "\n" +
+                            "El equipo de FindIT");
+            userRepository.delete(storedUser);
+        }
+
         storedUser.setDisabled(isDisabled);
-        return userMapper.toUserProfileDTO(userRepository.save(storedUser));
+
+        User savedUser = userRepository.save(storedUser);
+
+        emailService.sendEmail(savedUser.getEmail(), "Registro de usuario FindIT",
+
+                "Hola " + savedUser.getName() + ",\n \n" +
+                        "Tu solicitud de registro en FindIT fue aceptada!" + "\n \n" +
+                        "Pordrás ingresar a la aplicacion con tu nombre de usuario: " + savedUser.getUsername() +" y tu contraseña" +"\n \n" +
+                        "Te damos la bienvenida a FindIT, esperamos que disfrutes de la aplicación!" + "\n \n" +
+                        "Saludos cordiales," + "\n" +
+                        "El equipo de FindIT");
+
+        return userMapper.toUserProfileDTO(savedUser);
     }
 
     @Transactional
@@ -99,9 +129,20 @@ public class UserService {
                 });
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setTenant(tenant);
-        user.setDisabled(false);
+        user.setDisabled(true);
 
         User registeredUser = userRepository.save(user);
+
+        emailService.sendEmail(registeredUser.getEmail(), "Registro de usuario FindIT",
+                "Hola " + user.getName() + ",\n \n" +
+                        "Gracias por registrarte en FindIT!" + "\n \n" +
+                        "Para completar tu registro, un administrador de " + tenant.getName() + " revisará tu solicitud. \n \n" +
+                        "Una vez que seas aceptado, recibiras un correo con una contraseña para ingresar a FindIT con tu nombre de usuario" + "\n \n" +
+                        "Al ingresar a la aplicación, podrás cambiar tu contraseña cuando quieras desde la seccion Mi perfil -> cambio de contraseña" + "\n \n" +
+                        "Esperamos que pronto puedas disfrutar de la comodidad de FindIT" + "\n \n" +
+                        "Saludos cordiales," + "\n" +
+                        "El equipo de FindIT"
+        );
 
         return registeredUser;
     }
@@ -140,5 +181,25 @@ public class UserService {
         User updatedStoredUser = userRepository.save(dbUser);
 
         return userMapper.toUserProfileDTO(updatedStoredUser);
+    }
+
+    public void resetPassword(String email) {
+        User storedUser = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("No se encontró el usuario"));
+
+        String generatedPassword = PasswordGenerator.generatePassword(12);
+        storedUser.setPassword(passwordEncoder.encode(generatedPassword));
+
+        storedUser = userRepository.save(storedUser);
+
+        emailService.sendEmail(storedUser.getEmail(),"Olvido de contraseña FindIT",
+                "Hola " + storedUser.getName() + ",\n \n" +
+                        "Solicitaste un mail de recuperación de contraseña para tu usuario de FindIT" + "\n \n" +
+                        "Tu nueva contraseña es: " +generatedPassword+ "\n \n" +
+                        "Te recomendamos que, al ingresar a la aplicación, cambies tu contraseña desde seccion Mi perfil -> cambio de contraseña" + "\n \n" +
+                        "IMPORTANTE: No compartas tu nueva contraseña con nadie. Si no solicitaste este email, ponete en contacto con el administrador de tu compañia o contactate con el soporte de FindIT (finditsupport@gmail.com)" + "\n \n" +
+                        "Saludos cordiales," + "\n" +
+                        "El equipo de FindIT"
+        );
     }
 }

@@ -25,7 +25,9 @@ public class UserDetailService implements UserDetailsService {
     }
     private User getUserByUsername (String username){
         User user = userRepository.findUserByUsername(username)
-                .orElseThrow(() -> new BadCredentialsException("Credenciales invalidas (username)"));
+                .orElseThrow(() -> new BadCredentialsException("Credenciales invalidas"));
+        if(user.isDisabled())
+            throw new BadCredentialsException("Usuario no habilitado");
         return user;
     }
 

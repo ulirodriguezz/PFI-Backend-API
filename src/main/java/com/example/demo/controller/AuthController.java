@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.config.JwtProvider;
+import com.example.demo.dto.Message;
+import com.example.demo.dto.PasswordChangeRequestDTO;
 import com.example.demo.dto.SimpleUserDTO;
 import com.example.demo.dto.UserCredentials;
 import com.example.demo.mapper.UserMapper;
@@ -65,6 +67,13 @@ public class AuthController {
         loggedUser.setToken(token);
         return ResponseEntity.ok(loggedUser);
     }
+
+    @PostMapping("/auth/forgot-password")
+    public ResponseEntity<Message> passwordChange (@RequestBody PasswordChangeRequestDTO dto){
+        userService.resetPassword(dto.email());
+        return ResponseEntity.ok(new Message("Mail enviado"));
+    }
+
     @GetMapping("/health")
     public ResponseEntity<String> health() {
         return ResponseEntity.ok("Up and running");
