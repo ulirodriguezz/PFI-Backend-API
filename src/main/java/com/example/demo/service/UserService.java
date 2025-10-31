@@ -13,6 +13,9 @@ import com.example.demo.repository.TenantRepository;
 import com.example.demo.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.apache.http.auth.InvalidCredentialsException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,6 +28,7 @@ import java.util.Set;
 @Service
 public class UserService {
 
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
     private final PasswordEncoder passwordEncoder;
@@ -201,5 +205,14 @@ public class UserService {
                         "Saludos cordiales," + "\n" +
                         "El equipo de FindIT"
         );
+    }
+
+    public UserProfileDTO updatePassword(String loggedUserName, PasswordUpdateDTO dto) {
+        User storedUser = userRepository.findUserByUsername(loggedUserName)
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+
+        storedUser.setPassword(passwordEncoder.encode(dto.newPassword()));
+
+        return userMapper.toUserProfileDTO(userRepository.save(storedUser));
     }
 }

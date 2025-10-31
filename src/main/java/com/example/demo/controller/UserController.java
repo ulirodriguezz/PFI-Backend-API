@@ -70,6 +70,17 @@ public class UserController {
 
         return ResponseEntity.ok(user);
     }
+
+    @PostMapping("/user/change-password")
+    public ResponseEntity<UserProfileDTO> updateProfile(@RequestHeader("Authorization") String authHeader, @RequestBody PasswordUpdateDTO dto){
+        String token = jwtProvider.getTokenFromHeader(authHeader);
+        String loggedUserName = jwtProvider.getUsernameFromToken(token);
+
+        UserProfileDTO user = userService.updatePassword(loggedUserName,dto);
+
+        return ResponseEntity.ok(user);
+    }
+
     @GetMapping("/users/{userId}")
     public ResponseEntity<SimpleUserDTO> getUserById(@PathVariable long userId){
         return ResponseEntity.ok(userService.getUserById(userId));

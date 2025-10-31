@@ -10,9 +10,11 @@ public class Container {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "name",nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
-    @Column(name = "description",nullable = false)
+    @Column(name = "rfid_tag")
+    private String rfidTag;
+    @Column(name = "description", nullable = false)
     private String description;
     @Column(name = "reader_id")
     private String readerId;
@@ -73,5 +75,13 @@ public class Container {
 
     public void setTenant(Tenant tenant) {
         this.tenant = tenant;
+    }
+
+    public String getRfidTag() {
+        return rfidTag;
+    }
+
+    public void setRfidTag(String rfidTag) {
+        this.rfidTag = rfidTag;
     }
 }
