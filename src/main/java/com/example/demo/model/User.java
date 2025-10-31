@@ -13,7 +13,6 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-//    Es buena práctica acompañar esto con una validación de negocio en el servicio (por ejemplo, tirar 409 Conflict si el nombre ya existe).
     @Column(unique = true)
     private String username;
     private String password;
@@ -22,6 +21,8 @@ public class User {
     private String email;
     @Enumerated(EnumType.STRING)
     private UserRoleType role;
+    private boolean isDisabled;
+
     @ManyToMany
     @JoinTable(
             name = "user_favorite_items",
@@ -29,8 +30,13 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "item_id")
     )
     private Set<Item> favoriteItems;
+
+    @ManyToOne
+    @JoinColumn(name = "tenant_id")
+    private Tenant tenant;
+
     @PrePersist
-    public void OnCreate(){
+    public void OnCreate() {
         this.favoriteItems = new HashSet<>();
         this.role = UserRoleType.USER;
     }
@@ -102,17 +108,31 @@ public class User {
         this.role = role;
     }
 
+    public Tenant getTenant() {
+        return tenant;
+    }
+
+    public void setTenant(Tenant tenant) {
+        this.tenant = tenant;
+    }
+
+    public boolean isDisabled() {
+        return isDisabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        isDisabled = disabled;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(password, user.password) &&
-                Objects.equals(name, user.name) && Objects.equals(surname, user.surname) && Objects.equals(email, user.email);
+        return isDisabled == user.isDisabled && Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(name, user.name) && Objects.equals(surname, user.surname) && Objects.equals(email, user.email) && role == user.role && Objects.equals(favoriteItems, user.favoriteItems) && Objects.equals(tenant, user.tenant);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, password, name, surname, email);
+        return Objects.hash(id, username, password, name, surname, email, role, isDisabled, favoriteItems, tenant);
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 @Component
 public class ContainerMapper {
 
-    private SectorMapper sectorMapper;
+    private final SectorMapper sectorMapper;
 
     public ContainerMapper(SectorMapper sectorMapper) {
         this.sectorMapper = sectorMapper;
@@ -23,8 +23,10 @@ public class ContainerMapper {
         dto.setId(container.getId());
         dto.setName(container.getName());
         dto.setDescription(container.getDescription());
+        dto.setTagId(container.getRfidTag());
         if(container.getSector() != null)
             dto.setSectorId(container.getSector().getId());
+        dto.setReaderId(container.getReaderId());
         return dto;
     }
     public FullContainerDTO toFullContainerDTO(Container container){
@@ -35,12 +37,15 @@ public class ContainerMapper {
         dto.setSectorInfo(sectorMapper.toSimpleSectorDTO(container.getSector()));
         if(container.getSector() != null)
             dto.setSectorId(container.getSector().getId());
+        dto.setReaderId(container.getReaderId());
+        dto.setTagId(container.getRfidTag());
         return dto;
     }
     public Container toContainerEntity(SimpleContainerDTO dto){
         Container container = new Container();
         container.setName(dto.getName());
         container.setDescription(dto.getDescription());
+        container.setRfidTag(dto.getTagId());
         return container;
     }
     public void mergeChanges(Container storedContainer, SimpleContainerDTO changedData){
@@ -48,6 +53,10 @@ public class ContainerMapper {
             storedContainer.setDescription(changedData.getDescription());
         if(changedData.getName() != null)
             storedContainer.setName(changedData.getName());
+        if(changedData.getReaderId() != null)
+            storedContainer.setReaderId(changedData.getReaderId());
+        if(changedData.getTagId() != null)
+            storedContainer.setRfidTag(changedData.getTagId());
     }
     public List<SimpleContainerDTO> toSimpleDTOList(List<Container> containers){
         List<SimpleContainerDTO> dtos = new ArrayList<>();

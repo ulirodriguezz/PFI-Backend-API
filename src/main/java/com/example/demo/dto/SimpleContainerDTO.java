@@ -5,6 +5,10 @@ public class SimpleContainerDTO {
     private String name;
     private String description;
     private Long sectorId;
+    private String readerId;
+    private String tagId;
+
+
 
     public SimpleContainerDTO() {
     }
@@ -39,5 +43,21 @@ public class SimpleContainerDTO {
 
     public void setSectorId(Long sectorId) {
         this.sectorId = sectorId;
+    }
+
+    public String getReaderId() {
+        return readerId;
+    }
+
+    public void setReaderId(String readerId) {
+        this.readerId = readerId;
+    }
+
+    public String getTagId() {
+        return tagId;
+    }
+
+    public void setTagId(String tagId) {
+        this.tagId = tagId;
     }
 }

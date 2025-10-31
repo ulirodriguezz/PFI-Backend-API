@@ -16,7 +16,7 @@ public class Movement {
     @JoinColumn(name = "item_id",nullable = false)
     private Item item;
     @ManyToOne
-    @JoinColumn(name = "container_id",nullable = false)
+    @JoinColumn(name = "container_id")
     private Container destinationContainer;
     @Column(nullable = false)
     @CreationTimestamp

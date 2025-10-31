@@ -12,7 +12,10 @@ public class Sector {
     private String name;
     @Column(name = "description")
     private String description;
-    //Foto
+    @ManyToOne
+    @JoinColumn(name = "tenant_id")
+    private Tenant tenant;
+
     public Sector() {
     }
 
@@ -38,5 +41,13 @@ public class Sector {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Tenant getTenant() {
+        return tenant;
+    }
+
+    public void setTenant(Tenant tenant) {
+        this.tenant = tenant;
     }
 }

@@ -10,16 +10,20 @@ public class Container {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "name",nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
-    @Column(name = "description",nullable = false)
+    @Column(name = "rfid_tag")
+    private String rfidTag;
+    @Column(name = "description", nullable = false)
     private String description;
-    //Falta la foto del contenedor
     @Column(name = "reader_id")
     private String readerId;
     @ManyToOne
     @JoinColumn(name = "sector_id")
     private Sector sector;
+    @ManyToOne
+    @JoinColumn(name = "tenant_id")
+    private Tenant tenant;
 
 
     public Container() {
@@ -63,5 +67,21 @@ public class Container {
 
     public void setReaderId(String readerId) {
         this.readerId = readerId;
+    }
+
+    public Tenant getTenant() {
+        return tenant;
+    }
+
+    public void setTenant(Tenant tenant) {
+        this.tenant = tenant;
+    }
+
+    public String getRfidTag() {
+        return rfidTag;
+    }
+
+    public void setRfidTag(String rfidTag) {
+        this.rfidTag = rfidTag;
     }
 }

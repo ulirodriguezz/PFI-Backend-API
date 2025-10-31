@@ -20,10 +20,19 @@ public class Item {
 
     @Column(name = "location_description",nullable = true,length = 255)
     private String locationDescription;
-    // Falta la parte de las fotos
+
     @ManyToOne()
     @JoinColumn(name = "container_id",nullable = true)
     private Container container;
+
+    @ManyToOne
+    @JoinColumn(name = "tenant_id")
+    private Tenant tenant;
+
+    @ManyToOne
+    @JoinColumn(name = "in_use_by_user_id",nullable = true)
+    private User inUseBy;
+
 
     public Item() {
     }
@@ -74,5 +83,21 @@ public class Item {
 
     public void setContainer(Container container) {
         this.container = container;
+    }
+
+    public Tenant getTenant() {
+        return tenant;
+    }
+
+    public void setTenant(Tenant tenant) {
+        this.tenant = tenant;
+    }
+
+    public User getInUseBy() {
+        return inUseBy;
+    }
+
+    public void setInUseBy(User inUseBy) {
+        this.inUseBy = inUseBy;
     }
 }

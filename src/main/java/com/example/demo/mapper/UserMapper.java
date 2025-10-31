@@ -5,6 +5,8 @@ import com.example.demo.dto.UserProfileDTO;
 import com.example.demo.model.User;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class UserMapper {
     public User toUserEntity(SimpleUserDTO dto){
@@ -13,6 +15,7 @@ public class UserMapper {
         user.setName(dto.getName());
         user.setSurname(dto.getSurname());
         user.setPassword(dto.getPassword());
+        user.setEmail(dto.getEmail());
         return user;
     }
 
@@ -21,9 +24,13 @@ public class UserMapper {
                 .name(user.getName())
                 .surname(user.getSurname())
                 .username(user.getUsername())
+                .email(user.getEmail())
                 .id(user.getId())
                 .build();
         return dto;
+    }
+    public List<UserProfileDTO> toUserProfileDTOList(List<User> users){
+        return users.stream().map(this::toUserProfileDTO).toList();
     }
 
     public UserProfileDTO toUserProfileDTO (User user){

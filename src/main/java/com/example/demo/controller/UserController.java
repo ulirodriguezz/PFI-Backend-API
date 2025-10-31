@@ -6,6 +6,7 @@ import com.example.demo.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -17,6 +18,17 @@ public class UserController {
     public UserController (UserService userService, JwtProvider jwtProvider) {
         this.userService = userService;
         this.jwtProvider = jwtProvider;
+    }
+    @GetMapping("/admin/users")
+    public ResponseEntity<List<UserProfileDTO>> getAllUsers(@RequestParam() boolean enabled){
+        if(!enabled)
+            return ResponseEntity.ok(this.userService.getAllDisabledUsers());
+        return ResponseEntity.ok(this.userService.getAllUsers());
+
+    }
+    @PatchMapping("/admin/users/{username}")
+    public ResponseEntity<UserProfileDTO> enableOrRejectUser(@RequestParam() boolean isRejected, @PathVariable String username){
+            return ResponseEntity.ok(this.userService.  updateUserStatus(username,isRejected));
     }
 
     @GetMapping("/user/favorites")
@@ -57,5 +69,20 @@ public class UserController {
         UserProfileDTO user = userService.patchUser(loggedUserName,updateData);
 
         return ResponseEntity.ok(user);
+    }
+
+    @PostMapping("/user/change-password")
+    public ResponseEntity<UserProfileDTO> updateProfile(@RequestHeader("Authorization") String authHeader, @RequestBody PasswordUpdateDTO dto){
+        String token = jwtProvider.getTokenFromHeader(authHeader);
+        String loggedUserName = jwtProvider.getUsernameFromToken(token);
+
+        UserProfileDTO user = userService.updatePassword(loggedUserName,dto);
+
+        return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<SimpleUserDTO> getUserById(@PathVariable long userId){
+        return ResponseEntity.ok(userService.getUserById(userId));
     }
 }

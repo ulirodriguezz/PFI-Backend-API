@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.Message;
+import com.example.demo.dto.MovementAppPostDTO;
 import com.example.demo.dto.MovementGetDTO;
 import com.example.demo.dto.MovementPostDTO;
 import com.example.demo.service.ItemService;
@@ -28,6 +29,11 @@ public class MovementController {
     @PostMapping("/movements")
     public ResponseEntity<MovementPostDTO> registerMovement(@RequestBody MovementPostDTO movementData){
         MovementPostDTO registeredMovement = movementService.registerNewMovement(movementData);
+        return ResponseEntity.ok(registeredMovement);
+    }
+    @PostMapping("/movements/app")
+    public ResponseEntity<MovementAppPostDTO> registerMovementFromApp(@RequestBody MovementAppPostDTO movementData){
+        MovementAppPostDTO registeredMovement = movementService.registerNewMovement(movementData);
         return ResponseEntity.ok(registeredMovement);
     }
 
