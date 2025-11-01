@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.Message;
+import com.example.demo.dto.ReaderPostDTO;
 import com.example.demo.dto.WifiConfigDTO;
 import com.example.demo.model.RfidReader;
 import com.example.demo.service.ReaderService;
@@ -12,14 +13,12 @@ import java.util.List;
 
 @RestController
 public class ReaderController {
-
     private ReaderService readerService;
-
     public ReaderController(ReaderService readerService) {
         this.readerService = readerService;
     }
     @PostMapping("/readers/available")
-    public ResponseEntity<RfidReader> addAvailableReader(@RequestBody RfidReader reader){
+    public ResponseEntity<RfidReader> addAvailableReader(@RequestBody ReaderPostDTO reader){
         RfidReader savedReader = readerService.updateOrSaveAvailableReader(reader);
         return ResponseEntity.ok(savedReader);
     }

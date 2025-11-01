@@ -8,9 +8,13 @@ public class RfidReader {
     @Id
     private String readerId;
     private boolean available;
+    @ManyToOne
+    @JoinColumn(name = "tenant_id")
+    private Tenant tenant;
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "wifi_config_id")
     private WifiConfigInfo wifiConfigInfo;
+
     public RfidReader() {
     }
 
@@ -32,6 +36,14 @@ public class RfidReader {
 
     public WifiConfigInfo getWifiConfigInfo() {
         return wifiConfigInfo;
+    }
+
+    public Tenant getTenant() {
+        return tenant;
+    }
+
+    public void setTenant(Tenant tenant) {
+        this.tenant = tenant;
     }
 
     public void setWifiConfigInfo(WifiConfigInfo wifiConfigInfo) {

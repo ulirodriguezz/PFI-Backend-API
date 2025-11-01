@@ -1,6 +1,7 @@
 package com.example.demo.config;
 
 import com.example.demo.types.UserRoleType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,9 +24,13 @@ import java.util.List;
 public class SecurityConfig {
 
     private JwtAuthFilter jwtAuthFilter;
-    public SecurityConfig(JwtAuthFilter jwtAuthFilter){
+    private TenantFilter tenantFilter;
+
+    public SecurityConfig(JwtAuthFilter jwtAuthFilter, TenantFilter tenantFilter) {
         this.jwtAuthFilter = jwtAuthFilter;
+        this.tenantFilter = tenantFilter;
     }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
@@ -38,6 +43,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(tenantFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
     @Bean

@@ -1,6 +1,7 @@
 package com.example.demo.repository;
 
 import com.example.demo.model.Sector;
+import com.example.demo.model.Tenant;
 import com.example.demo.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,4 +20,7 @@ public interface SectorRepository extends JpaRepository<Sector,Long> {
 
     @Query("FROM Sector s WHERE s.tenant.id = :tenantId ")
     List<Sector> findSectorsByTenantId(@Param("tenantId") long tenantId);
+
+    @Query("FROM Sector s WHERE ((s.name LIKE %:query% OR s.description LIKE %:query%) AND s.tenant = :tenant)")
+    List<Sector> findAllByQueryAndTenant(@Param("query") String query, @Param("tenant") Tenant tenant);
 }

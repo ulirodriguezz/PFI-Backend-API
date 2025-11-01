@@ -27,8 +27,9 @@ public class UserController {
 
     }
     @PatchMapping("/admin/users/{username}")
-    public ResponseEntity<UserProfileDTO> enableOrRejectUser(@RequestParam() boolean isRejected, @PathVariable String username){
-            return ResponseEntity.ok(this.userService.  updateUserStatus(username,isRejected));
+    public ResponseEntity<Message> enableOrRejectUser(@RequestParam() boolean isRejected, @PathVariable String username){
+        this.userService.updateUserStatus(username,isRejected);
+            return ResponseEntity.ok(new Message("Usuario actualizado"));
     }
 
     @GetMapping("/user/favorites")

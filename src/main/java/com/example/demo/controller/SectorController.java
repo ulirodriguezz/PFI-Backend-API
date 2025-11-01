@@ -18,6 +18,7 @@ public class SectorController {
         this.containerService = containerService;
     }
 
+    @Deprecated
     @GetMapping("/sectors")
     public ResponseEntity<List<SimpleSectorDTO>> getAllSectors(){
         List<SimpleSectorDTO> resultList = sectorService.getAllSectors();

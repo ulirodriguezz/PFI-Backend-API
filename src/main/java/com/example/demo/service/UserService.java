@@ -91,7 +91,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserProfileDTO updateUserStatus(String username, boolean isDisabled) {
+    public void updateUserStatus(String username, boolean isDisabled) {
         User storedUser = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException("No se encontrò el usuario"));
 
@@ -105,6 +105,7 @@ public class UserService {
                             "Saludos cordiales," + "\n" +
                             "El equipo de FindIT");
             userRepository.delete(storedUser);
+            return;
         }
 
         storedUser.setDisabled(isDisabled);
@@ -120,7 +121,7 @@ public class UserService {
                         "Saludos cordiales," + "\n" +
                         "El equipo de FindIT");
 
-        return userMapper.toUserProfileDTO(savedUser);
+        userMapper.toUserProfileDTO(savedUser);
     }
 
     @Transactional

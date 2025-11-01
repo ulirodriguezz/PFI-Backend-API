@@ -46,9 +46,8 @@ public class ItemController {
     public ResponseEntity<List<SimpleItemDTO>> filterItems(
             @RequestParam(required = false, defaultValue = "") String query
     ) {
-        List<Item> matchingItems = itemService.filterItems(query);
-        List<SimpleItemDTO> resultData = itemMapper.toSimpleItemDtoList(matchingItems);
-        return ResponseEntity.status(HttpStatus.OK).body(resultData);
+        List<SimpleItemDTO> matchingItems = itemService.filterItems(query);
+        return ResponseEntity.status(HttpStatus.OK).body(matchingItems);
     }
 
     @GetMapping("items/by-tag/{tagId}")
@@ -73,7 +72,7 @@ public class ItemController {
     }
 
     @PatchMapping("/items/{itemId}/tag")
-    public ResponseEntity<SimpleItemDTO> asingRfidTagToItem(@PathVariable long itemId, @RequestBody SimpleItemDTO tagData) {
+    public ResponseEntity<SimpleItemDTO> assignRfidTagToItem(@PathVariable long itemId, @RequestBody SimpleItemDTO tagData) {
         SimpleItemDTO updatedItem = itemService.assignRfidTagToItem(itemId, tagData.getTagId());
         return ResponseEntity.ok(updatedItem);
     }

@@ -20,14 +20,14 @@ public class JwtProvider {
     private final long jwtExpiration = 1000 * 60 * 30000;
 
     public String generateToken(Authentication auth){
-        UserDetails principalUser = (UserDetails) auth.getPrincipal();
+        CustomUserDetails principalUser = (CustomUserDetails) auth.getPrincipal();
         Map<String, Object> claims = new HashMap<>();
         List<String> roles = principalUser.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
         claims.put("roles", roles);
-        claims.put("tenantId",1);
+        claims.put("tenantId",principalUser.getTenantId());
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -56,13 +56,13 @@ public class JwtProvider {
         return  username;
     }
 
-    public String getTenantFromToken(String token){
-        String tenantId =  Jwts.parserBuilder()
+    public Long getTenantFromToken(String token){
+        Long tenantId =  Jwts.parserBuilder()
                 .setSigningKey(jwtSecret)
                 .build()
                 .parseClaimsJws(token)
-                .getBody().get("tenantId",String.class);
-        return  tenantId;
+                .getBody().get("tenantId",Long.class);
+        return tenantId;
     }
 
     public boolean validateToken(String token){

@@ -1,10 +1,16 @@
 package com.example.demo.service;
+import com.example.demo.config.CustomUserDetails;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -16,11 +22,9 @@ public class UserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username){
         User user = getUserByUsername(username);
-        UserDetails userDetails = org.springframework.security.core.userdetails.User
-                .withUsername(user.getUsername())
-                .password(user.getPassword())
-                .authorities(user.getRole().toString())
-                .build();
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
+        UserDetails userDetails = new CustomUserDetails(user.getUsername(),user.getPassword(),user.getTenant().getId(),authorities);
         return userDetails;
     }
     private User getUserByUsername (String username){

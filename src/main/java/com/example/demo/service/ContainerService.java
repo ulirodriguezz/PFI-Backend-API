@@ -1,19 +1,11 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.FullContainerDTO;
-import com.example.demo.dto.ImageDTO;
-import com.example.demo.dto.SimpleContainerDTO;
-import com.example.demo.dto.SimpleSectorDTO;
+import com.example.demo.dto.*;
+import com.example.demo.helpers.TenantContext;
 import com.example.demo.mapper.ContainerMapper;
 import com.example.demo.mapper.ItemMapper;
-import com.example.demo.model.Container;
-import com.example.demo.model.Image;
-import com.example.demo.model.Item;
-import com.example.demo.model.Sector;
-import com.example.demo.repository.ContainerRepository;
-import com.example.demo.repository.ItemRepository;
-import com.example.demo.repository.MovementRepository;
-import com.example.demo.repository.SectorRepository;
+import com.example.demo.model.*;
+import com.example.demo.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -29,11 +21,11 @@ public class ContainerService {
     private final ItemRepository itemRepository;
     private final SectorRepository sectorRepository;
     private final ImageService imageService;
-
     private ReaderService readerService;
     private final MovementRepository movementRepository;
+    private final TenantRepository tenantRepository;
 
-    public ContainerService(ContainerRepository containerRepository, ContainerMapper containerMapper, ItemMapper itemMapper, ItemRepository itemRepository, SectorRepository sectorRepository, ImageService imageService, ReaderService readerService, MovementRepository movementRepository) {
+    public ContainerService(ContainerRepository containerRepository, ContainerMapper containerMapper, ItemMapper itemMapper, ItemRepository itemRepository, SectorRepository sectorRepository, ImageService imageService, ReaderService readerService, MovementRepository movementRepository, TenantRepository tenantRepository) {
         this.containerRepository = containerRepository;
         this.containerMapper = containerMapper;
         this.itemMapper = itemMapper;
@@ -42,6 +34,7 @@ public class ContainerService {
         this.imageService = imageService;
         this.readerService = readerService;
         this.movementRepository = movementRepository;
+        this.tenantRepository = tenantRepository;
     }
 
     public List<Container> getAllContainers() {
@@ -63,15 +56,30 @@ public class ContainerService {
     }
 
     public List<SimpleContainerDTO> getFilteredContainers(String query) {
+        if (TenantContext.getTenantId() != 1) return getFilteredContainersByTenant(query);
+
         List<Container> results = containerRepository.findAllByNameContainsOrDescriptionContaining(query, query);
         if (results.isEmpty())
             throw new EntityNotFoundException("No se encontraron containers para la búsqueda: " + query);
         return containerMapper.toSimpleDTOList(results);
     }
 
+    private List<SimpleContainerDTO> getFilteredContainersByTenant(String query) {
+        Tenant userTenant = tenantRepository.findById(TenantContext.getTenantId()).orElseThrow(() -> new EntityNotFoundException("Tenant No Encontado"));
+
+        List<Container> results = containerRepository.findAllByQueryAndTenant(query, userTenant);
+        if (results.isEmpty())
+            throw new EntityNotFoundException("No se encontraron containers para la búsqueda: " + query);
+
+        return containerMapper.toSimpleDTOList(results);
+    }
+
     @Transactional
     public SimpleContainerDTO save(SimpleContainerDTO newContainerData) {
+        Tenant userTenant = tenantRepository.findById(TenantContext.getTenantId()).orElseThrow(() -> new EntityNotFoundException("Tenant No Encontrado"));
+
         Container newContainer = containerMapper.toContainerEntity(newContainerData);
+        newContainer.setTenant(userTenant);
         return containerMapper.toSimpleDTO(containerRepository.save(newContainer));
     }
 
@@ -104,10 +112,13 @@ public class ContainerService {
     @Transactional
     public SimpleContainerDTO saveContainerInSector(long sectorId, SimpleContainerDTO containerData) {
         Sector sector = sectorRepository.getSectorById(sectorId).orElseThrow(() -> new EntityNotFoundException("Sector Not Found"));
-        Container newContainer = containerMapper.toContainerEntity(containerData);
-        newContainer.setSector(sector);
-        Container storedContainer = containerRepository.save(newContainer);
+        Tenant userTenant = tenantRepository.findById(TenantContext.getTenantId()).orElseThrow(() -> new EntityNotFoundException("Tenant No Encontrado"));
 
+        Container newContainer = containerMapper.toContainerEntity(containerData);
+        newContainer.setTenant(userTenant);
+        newContainer.setSector(sector);
+
+        Container storedContainer = containerRepository.save(newContainer);
         return containerMapper.toSimpleDTO(storedContainer);
 
     }
@@ -135,5 +146,9 @@ public class ContainerService {
         return imageService.getAllImagesByContainerId(itemId);
     }
 
-
+    @Transactional
+    public FullContainerDTO getContainerByTagId(String tagId) {
+        Container existingContainer = containerRepository.findByRfidTag(tagId);
+        return containerMapper.toFullContainerDTO(existingContainer);
+    }
 }
